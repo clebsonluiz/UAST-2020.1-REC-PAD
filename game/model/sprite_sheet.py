@@ -31,7 +31,7 @@ class SpriteSheet:
         s_list: List[List[pg.SurfaceType]] = []
 
         for row in range(rows):
-            s_list[row] = []
+            s_list.append([])
             for col in range(cols):
                 s_list[row].append(self.get_image_from_sh(
                     x=(i_x + (col * t_width) + (col * jmp_p_x)),
@@ -47,28 +47,33 @@ class SpriteSheet:
         return image
 
     def get_sprite(self, row=0, col=0):
+        assert (row < len(self.sprites) and
+                col < len(self.sprites[row]), 'Index out of Range')
         return self.sprites[row][col]
 
-    def sprite_list(self,
+    def sprite_list(self, from_list: List[List[pg.SurfaceType]],
                     from_row=0, from_i=0, to_i=0,
                     to_row=0, to_col=0) -> List[pg.SurfaceType]:
-        if to_row is 0:
-            to_row = len(self.sprite_sheet) - 1
-        if to_col is 0:
-            to_col = len(self.sprite_sheet[to_row]) - 1
 
-        assert (
-            (from_row is not None) and (to_row is not None) and
-            (to_col is not None) and (to_row >= from_row),
-            'Não existe um indice de imagens válido definido'
-        )
+        if from_list is None or len(from_list) <= 0:
+            from_list = self.sprites
+        if to_row is 0:
+            to_row = len(from_list) - 1
+        if to_col is 0:
+            to_col = len(from_list[to_row])
+
+        # assert (
+        #     (from_row is not None) and (to_row is not None) and
+        #     (to_col is not None) and (to_row >= from_row),
+        #     'Não existe um indice de imagens válido definido'
+        # )
 
         s_list = []
 
         for row in range((to_row + 1)):
             if row == to_row:
-                s_list.extend(self.sprite_sheet[row][:to_col])
+                s_list.extend(from_list[row][:to_col])
             else:
-                s_list.extend(self.sprite_sheet[row])
+                s_list.extend(from_list[row])
 
         return s_list[from_i: to_i]

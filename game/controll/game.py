@@ -4,15 +4,18 @@ import game.controll.events as e
 from game.constants import *
 import os
 
+from game.model.player import Player
+
 class Game:
 
     def __init__(self, width=640, height=480, title='Game Window'):
         self.Frame = frame.Frame(width, height, title)
         self.clock = pg.time.Clock()
+        self.FPS: float = 30.0
         self.running = False
 
-        self.logo = pg.image.load(SPRITE_SHEET_NAME)
-
+        self.player = Player()
+        self.player.make_animations_list()
         pass
 
     def start(self):
@@ -31,18 +34,20 @@ class Game:
             e.events(self)
             self._update()
             self._render(self.Frame.get_tela())
+            self.clock.tick(self.FPS)
             pass
         pass
 
     def _render(self, tela: pg.Surface = None):
-        if tela is None:
+        if tela is None or not self.player.loaded():
             return
-        tela.fill([30, 30, 30])
-        tela.blit(self.logo, [280, 190])
+        tela.fill(BLACK)
+        tela.blit(self.player.current_sprite(), [280, 190])
 
         self.Frame.update()
 
         pass
 
-    def _update(self, gt=None):
+    def _update(self,):
+        self.player.update()
         pass
