@@ -42,7 +42,7 @@ class Game:
         if tela is None or not self.player.loaded():
             return
         tela.fill(BLACK)
-        tela.blit(self.player.current_sprite(), [280, 190])
+        tela.blit(self.player.current_sprite(), (280, 190))
 
         self.Frame.update()
 
