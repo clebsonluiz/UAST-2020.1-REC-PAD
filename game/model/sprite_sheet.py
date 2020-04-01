@@ -14,6 +14,8 @@ class SpriteSheet(SpriteSheetAnimation, ABC):
         self.sprite_sheet = pg.image.load(ASSETS_PATH + 'images/' + file)
         self.invert_x: bool = invert_x
         self.invert_y: bool = invert_y
+        self._up = False
+        self._down = False
 
     def build(self,
               t_width: int, t_height: int,
@@ -29,7 +31,7 @@ class SpriteSheet(SpriteSheetAnimation, ABC):
             for col in range(cols):
                 s_list[row].append(self.get_image_from_sh(
                     x=(i_x + (col * t_width) + (col * jmp_p_x)),
-                    y=(i_y + (row * t_width) + (row * jmp_p_y)),
+                    y=(i_y + (row * t_height) + (row * jmp_p_y)),
                     width=t_width, height=t_height,
                 ))
         return s_list
@@ -41,15 +43,16 @@ class SpriteSheet(SpriteSheetAnimation, ABC):
         image = pg.transform.flip(image, self.invert_x, self.invert_y)
         return image
 
-    def get_sprite(self, row=0, col=0):
-        return self.animacoes[row][col]
+    # def get_sprite(self, row=0, col=0):
+    #     return self.animacoes[row][col]
 
-    def sprite_list(self, from_list: List[List[pg.SurfaceType]],
+    @staticmethod
+    def sprite_list(from_list: List[List[pg.SurfaceType]],
                     from_row=0, from_i=0, to_i=0,
                     to_row=0, to_col=0) -> List[pg.SurfaceType]:
 
-        if from_list is None or len(from_list) <= 0:
-            from_list = self.animacoes
+        assert (from_list is not None and len(from_list) > 0)
+
         if to_row is 0:
             to_row = len(from_list) - 1
         if to_col is 0:
@@ -64,3 +67,21 @@ class SpriteSheet(SpriteSheetAnimation, ABC):
                 s_list.extend(from_list[row])
 
         return s_list[from_i: to_i]
+
+    def is_falling(self) -> bool:
+        return self._down
+
+    def is_jumping(self) -> bool:
+        return self._up
+
+    def do_jump(self):
+        self._up = True
+
+    def do_fall(self):
+        self._down = True
+
+    def stop_fall(self):
+        self._down = False
+
+    def stop_jump(self):
+        self._up = False

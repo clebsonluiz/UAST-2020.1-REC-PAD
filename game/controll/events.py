@@ -13,6 +13,8 @@ def events(game):
             if event.key == pg.K_ESCAPE:
                 game.stop()
                 sys.exit()
+            elif event.key == pg.K_RIGHT:
+                game.player.do_jump()
 
     # event = pg.event.wait()
     #

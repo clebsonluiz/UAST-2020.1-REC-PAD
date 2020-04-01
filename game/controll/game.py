@@ -4,6 +4,7 @@ import game.controll.events as e
 from game.constants import *
 import os
 
+from game.model.map import BackgroundMap
 from game.model.player import Player
 
 class Game:
@@ -14,8 +15,11 @@ class Game:
         self.FPS: float = 30.0
         self.running = False
 
-        self.player = Player()
+        self.map = BackgroundMap()
+        self.player = Player(self.map)
         self.player.make_animations_list()
+        self.player.pos_x = 20
+        self.player.pos_y = 200
         pass
 
     def start(self):
@@ -42,8 +46,10 @@ class Game:
         if tela is None or not self.player.loaded():
             return
         tela.fill(BLACK)
-        tela.blit(self.player.current_sprite(), (280, 190))
-
+        tela.fill(WHITE, self.map.get_limit_top())
+        tela.fill(WHITE, self.map.get_limit_bottom())
+        tela.blit(self.player.current_sprite(), self.player.get_position())
+        tela.blit(pg.font.SysFont("monospace", 20).render('Score: ' + str(0), 1, WHITE), (10, 10))
         self.Frame.update()
 
         pass

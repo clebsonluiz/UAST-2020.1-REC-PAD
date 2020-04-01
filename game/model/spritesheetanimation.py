@@ -33,21 +33,36 @@ class _Animation:
 
 class SpriteSheetAnimation(ABC):
     
-    def __init__(self):
+    def __init__(self, curr_width: int = 0, curr_height: int = 0):
         self.animacoes: List[_Animation] = []
-        self.pos_x: int = 0
-        self.pos_y: int = 0
-        self.vec_x: int = 0
-        self.vec_y: int = 0
+        self.pos_x: float = 0
+        self.pos_y: float = 0
+        self.vec_x: float = 0
+        self.vec_y: float = 0
         self._curr_row: int = 0
-        self.curr_width = None
-        self.curr_height = None
+        self.curr_width: int = curr_width
+        self.curr_height: int = curr_height
 
     def insert(self, frames: List[pg.SurfaceType], loop: bool = True):
         self.animacoes.append(_Animation(frames=frames, loop=loop))
 
     def get_position(self) -> tuple:
         return self.pos_x, self.pos_y
+
+    def get_vector(self) -> tuple:
+        return self.vec_x, self.vec_y
+
+    def to_rect(self, x: float = None, y: float = None) -> pg.Rect:
+        if x is None:
+            x = self.pos_x
+        if y is None:
+            y = self.pos_y
+        if self.curr_height is 0:
+            self.curr_height = self.current_sprite().get_height()
+        if self.curr_width is 0:
+            self.curr_width = self.current_sprite().get_width()
+
+        return pg.rect.Rect(x, y, self.curr_width, self.curr_height)
 
     def set_curr_row(self, curr_row: int = 0):
         if curr_row >= len(self.animacoes) or curr_row < 0:
