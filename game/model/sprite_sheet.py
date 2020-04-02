@@ -21,7 +21,8 @@ class SpriteSheet(SpriteSheetAnimation, ABC):
               t_width: int, t_height: int,
               cols: int = 0, rows: int = 0,
               i_x: int = 0, i_y: int = 0,
-              jmp_p_x: int = 0, jmp_p_y: int = 0) -> List[List[pg.SurfaceType]]:
+              jmp_p_x: int = 0, jmp_p_y: int = 0,
+              invert_x=None, invert_y=None) -> List[List[pg.SurfaceType]]:
         assert (cols > 0) and (t_height > 0 and t_width > 0)
 
         s_list: List[List[pg.SurfaceType]] = []
@@ -33,14 +34,20 @@ class SpriteSheet(SpriteSheetAnimation, ABC):
                     x=(i_x + (col * t_width) + (col * jmp_p_x)),
                     y=(i_y + (row * t_height) + (row * jmp_p_y)),
                     width=t_width, height=t_height,
+                    invert_x=invert_x, invert_y=invert_y
                 ))
         return s_list
 
-    def get_image_from_sh(self, x: int = 0, y: int = 0, width: int = 0, height: int = 0):
+    def get_image_from_sh(self,
+                          x: int = 0, y: int = 0,
+                          width: int = 0, height: int = 0,
+                          invert_x=None, invert_y=None):
         image = pg.Surface([width, height]).convert()
         image.blit(self.sprite_sheet, (0, 0), (x, y, width, height))
         image.set_colorkey(BLACK)
-        image = pg.transform.flip(image, self.invert_x, self.invert_y)
+        image = pg.transform.flip(image,
+                                  self.invert_x if (invert_x is None) else invert_x,
+                                  self.invert_y if (invert_y is None) else invert_y,)
         return image
 
     # def get_sprite(self, row=0, col=0):

@@ -37,8 +37,8 @@ class SpriteSheetAnimation(ABC):
         self.animacoes: List[_Animation] = []
         self.pos_x: float = 0
         self.pos_y: float = 0
-        self.vec_x: float = 0
-        self.vec_y: float = 0
+        self._vec_x: float = 0
+        self._vec_y: float = 0
         self._curr_row: int = 0
         self.curr_width: int = curr_width
         self.curr_height: int = curr_height
@@ -50,7 +50,16 @@ class SpriteSheetAnimation(ABC):
         return self.pos_x, self.pos_y
 
     def get_vector(self) -> tuple:
-        return self.vec_x, self.vec_y
+        return self._vec_x, self._vec_y
+
+    def get_vec_y(self) -> float:
+        return self._vec_y
+
+    def set_vec_y(self, y: float):
+        self._vec_y = y
+
+    def sum_vec_y(self, y: float):
+        self._vec_y = sum([self._vec_y, y])
 
     def to_rect(self, x: float = None, y: float = None) -> pg.Rect:
         if x is None:

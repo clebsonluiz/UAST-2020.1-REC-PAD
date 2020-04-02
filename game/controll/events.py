@@ -15,7 +15,8 @@ def events(game):
                 sys.exit()
             elif event.key == pg.K_RIGHT:
                 game.player.do_jump()
-
+            elif event.key == pg.K_UP:
+                game.player.change_gravit()
     # event = pg.event.wait()
     #
     # if event.type == pg.QUIT:
