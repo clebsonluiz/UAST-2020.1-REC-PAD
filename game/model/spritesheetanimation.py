@@ -52,13 +52,13 @@ class SpriteSheetAnimation(ABC):
     def get_vector(self) -> tuple:
         return self._vec_x, self._vec_y
 
-    def get_vec_y(self) -> float:
+    def get_dy(self) -> float:
         return self._vec_y
 
-    def set_vec_y(self, y: float):
+    def set_dy(self, y: float):
         self._vec_y = y
 
-    def sum_vec_y(self, y: float):
+    def sum_dy(self, y: float):
         self._vec_y = sum([self._vec_y, y])
 
     def to_rect(self, x: float = None, y: float = None) -> pg.Rect:
