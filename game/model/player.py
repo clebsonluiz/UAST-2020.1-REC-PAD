@@ -7,12 +7,12 @@ from game.model.sprite_sheet import SpriteSheet
 
 class Player(SpriteSheet):
 
-    def __init__(self, background: BackgroundMap):
+    def __init__(self, background: BackgroundMap, invert_gravity: bool = False):
         super().__init__('MS6_Hunter_Walker(Edited).png', invert_x=True)
         self._loaded = False
         self._col_top: bool = False
         self._col_bottom: bool = False
-        self._g_inverted: bool = False
+        self._g_inverted: bool = invert_gravity
         self._bg = background
 
     def _jump_starts(self) -> float:
@@ -97,10 +97,10 @@ class Player(SpriteSheet):
 
     def _get_animation_row(self) -> int:
         if self.is_jumping():
-            return 4 if self._g_inverted else 1
+            return 1
         elif self.is_falling():
-            return 5 if self._g_inverted else 2
-        return 3 if self._g_inverted else 0
+            return 2
+        return 0
 
     def loaded(self) -> bool:
         return self._loaded
@@ -111,6 +111,15 @@ class Player(SpriteSheet):
         self._next_move()
         self.set_curr_row(curr_row=self._get_animation_row())
         super().update()
+
+    def render(self, tela: pg.Surface, color: tuple = (255, 255, 255, 255)):
+        if tela is None:
+            return
+        if color is not None:
+            self.current_sprite().fill(color=color, special_flags=pg.BLEND_RGBA_MIN)
+        self.invert_y = self._g_inverted
+        image = pg.transform.flip(self.current_sprite(), not self.invert_x, self.invert_y,)
+        tela.blit(image, self.get_position())
 
     def make_animations_list(self):
         s_matrix_walking = self.build(
@@ -138,35 +147,14 @@ class Player(SpriteSheet):
             from_row=0, from_i=9, to_i=18,
         )
 
-        s_matrix_walking_2 = self.build(
-            t_width=63, t_height=39,
-            cols=11, rows=1,
-            i_x=10, i_y=240,
-            jmp_p_x=2, jmp_p_y=0, invert_y=True
-        )
-        s_matrix_jumping_falling_2 = self.build(
-            t_width=37, t_height=46,
-            cols=9, rows=2,
-            i_x=10, i_y=94,
-            jmp_p_x=12, jmp_p_y=18, invert_y=True
-        )
-        s_list_walking_2 = SpriteSheet.sprite_list(
-            from_list=s_matrix_walking_2,
-            from_row=0, from_i=0, to_i=11,
-        )
-        s_list_jumping_2 = SpriteSheet.sprite_list(
-            from_list=s_matrix_jumping_falling_2,
-            from_row=0, from_i=0, to_i=9,
-        )
-        s_list_falling_2 = SpriteSheet.sprite_list(
-            from_list=s_matrix_jumping_falling_2,
-            from_row=0, from_i=9, to_i=18,
-        )
-
         self.insert(s_list_walking)
         self.insert(s_list_jumping, False)
         self.insert(s_list_falling, False)
-        self.insert(s_list_walking_2)
-        self.insert(s_list_jumping_2, False)
-        self.insert(s_list_falling_2, False)
         self._loaded = True
+
+    @staticmethod
+    def swich_positions_player_shadow(player: SpriteSheet, shadow: SpriteSheet):
+        player_position: tuple = player.get_position()
+        shadow_position: tuple = shadow.get_position()
+        player.set_position(shadow_position)
+        shadow.set_position(player_position)

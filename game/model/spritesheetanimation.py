@@ -49,6 +49,10 @@ class SpriteSheetAnimation(ABC):
     def get_position(self) -> tuple:
         return self.pos_x, self.pos_y
 
+    def set_position(self, position_xy: tuple):
+        self.pos_x = position_xy[0]
+        self.pos_y = position_xy[1]
+
     def get_vector(self) -> tuple:
         return self._vec_x, self._vec_y
 
