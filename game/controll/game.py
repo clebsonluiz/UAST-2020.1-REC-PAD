@@ -51,7 +51,7 @@ class Game:
         tela.fill(WHITE, self.map.get_limit_bottom())
         for element in self.map.get_obstacles():
             tela.fill(WHITE, element.to_rec())
-        tela.blit(self.player.current_sprite(), self.player.get_position())
+        self.player.render(tela=tela, )
         tela.blit(pg.font.SysFont("monospace", 20).render('Score: ' + str(self.score), 1, WHITE), (10, 10))
         self.Frame.update()
 
@@ -64,3 +64,13 @@ class Game:
         self.player.update()
 
         pass
+
+    @staticmethod
+    def blit_alpha(target: pg.Surface, source: pg.SurfaceType, location: tuple, opacity: int):
+        x = location[0]
+        y = location[1]
+        temp: pg.Surface = pg.Surface((source.get_width(), source.get_height())).convert()
+        temp.blit(target, (-x, -y))
+        temp.blit(source, (0, 0))
+        temp.set_alpha(opacity)
+        target.blit(temp, location)
