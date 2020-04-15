@@ -2,7 +2,7 @@ import pygame as pg
 
 from game.model.entity_player import EntityPlayer
 from game.model.map import BackgroundMap
-
+from game.constants import *
 
 class Player:
 
@@ -14,9 +14,10 @@ class Player:
         self.make_animations_list()
 
         self.player.pos_x = 40
-        self.player.pos_y = 250
+        self.player.pos_y = background.get_background_rect().centery
         self.shadow.pos_x = self.player.pos_x
         self.shadow.pos_y = self.player.pos_y - self.player.current_sprite().get_height()
+
         self.player.curr_height = 40
         self.player.curr_width = 50
         self.shadow.curr_height = self.player.curr_height
@@ -44,7 +45,7 @@ class Player:
     def render(self, tela: pg.Surface):
         if tela is None:
             return
-        self.shadow.render(tela=tela, color=(20, 20, 20, 255), opacity=200)
+        self.shadow.render(tela=tela, color=DARK_GRAY, opacity=200)
         self.player.render(tela=tela)
 
     def make_animations_list(self):

@@ -50,14 +50,21 @@ class Obstacle:
 class BackgroundMap:
 
     def __init__(self):
-        self._rect_top = pg.rect.Rect(0, SCREEN_HEIGHT * 0.1, SCREEN_WIDTH, 5)
-        self._rect_bottom = pg.rect.Rect(0, SCREEN_HEIGHT * 0.7, SCREEN_WIDTH, 5)
+        self._rect_top = pg.rect.Rect(0, SCREEN_HEIGHT * 0.2, SCREEN_WIDTH, 10)
+        self._rect_bottom = pg.rect.Rect(0, SCREEN_HEIGHT * 0.7, SCREEN_WIDTH, 10)
         self._obstacles: List[Obstacle] = []
         self._default_lenths: List[int] = [20, 50, 100]
 
         self._obstacles.append(self._generate_an_obstacle_at(position=0))
         self._obstacles.append(self._generate_an_obstacle_at(position=1))
         self._obstacles.append(self._generate_an_obstacle_at(position=1))
+
+    def get_background_rect(self) -> pg.Rect:
+        x: float = 0.0
+        y: float = self.get_limit_top().bottom
+        width: float = SCREEN_WIDTH
+        height: float = self.get_limit_bottom().top - self.get_limit_top().bottom
+        return pg.Rect(x, y, width, height)
 
     def get_limit_top(self) -> pg.Rect:
         return self._rect_top
