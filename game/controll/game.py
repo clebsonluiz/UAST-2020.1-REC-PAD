@@ -2,7 +2,6 @@ import pygame as pg
 import game.view.frame as frame
 import game.controll.events as e
 from game.constants import *
-import os
 
 from game.model.map import BackgroundMap
 from game.model.player import Player

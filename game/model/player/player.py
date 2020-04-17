@@ -1,11 +1,21 @@
 import pygame as pg
 
-from game.model.entity_player import EntityPlayer
-from game.model.map import BackgroundMap
 from game.constants import *
 
-class Player:
+from ..map import BackgroundMap
+from .entity_player import EntityPlayer
 
+
+class Player:
+    """
+    Player class, represents the one object player
+    that composed of a player and his shadow
+
+    Parameters
+    __________
+    background: BackgroundMap
+        Colision map of this object to the checks his position in screen
+    """
     def __init__(self, background: BackgroundMap):
 
         self.player = EntityPlayer(background, )
@@ -24,9 +34,17 @@ class Player:
         self.shadow.curr_width = self.player.curr_width
 
     def loaded(self) -> bool:
+        """
+        :return: bool value, true if this object as ready to be rendenized in screen
+        """
         return self.player.loaded() and self.shadow.loaded()
 
     def do_change_gravit(self):
+        """
+        change the gravity of the player and the shadow, to do his efect of a mirror
+        animations. This call change the gravity and the positions of player and his shadow
+        at screen
+        """
         self.player.change_gravit()
         self.shadow.change_gravit()
         player_position: tuple = self.player.get_position()
@@ -35,19 +53,33 @@ class Player:
         self.shadow.set_position(player_position)
 
     def do_jump(self):
+        """
+        this call makes the player and his shadow execute the jump ant screen
+        """
         self.player.do_jump()
         self.shadow.do_jump()
 
     def update(self):
+        """
+        Updates the current stats of player and his shadow
+        """
         self.player.update()
         self.shadow.update()
 
     def render(self, tela: pg.Surface):
-        if tela is None:
+        """
+        Render the player and his shadow at screen Surface,
+
+        :param tela: Surface screen frame
+        """
+        if tela is None or not self.loaded():
             return
         self.shadow.render(tela=tela, color=DARK_GRAY, opacity=200)
         self.player.render(tela=tela)
 
     def make_animations_list(self):
+        """
+        build the animations of shadow and player
+        """
         self.player.make_animations_list()
         self.shadow.make_animations_list()
