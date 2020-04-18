@@ -3,6 +3,8 @@ from random import randint as next_int
 import pygame as pg
 from game.constants import *
 from game.model.map.obstacle import Obstacle
+from .tile_layer import TileLayer
+from .utils import BACKGROUND_LAYER, LAYER_1, LAYER_2, LAYER_3
 
 
 class BackgroundMap:
@@ -13,14 +15,30 @@ class BackgroundMap:
     """
 
     def __init__(self):
-        self._rect_top = pg.rect.Rect(0, SCREEN_HEIGHT * 0.2, SCREEN_WIDTH, 10)
-        self._rect_bottom = pg.rect.Rect(0, SCREEN_HEIGHT * 0.7, SCREEN_WIDTH, 10)
+        self._rect_top = pg.rect.Rect(0, (SCREEN_HEIGHT * 0.3) - 10, SCREEN_WIDTH, 10)
+        self._rect_bottom = pg.rect.Rect(0, SCREEN_HEIGHT * 0.6, SCREEN_WIDTH, 10)
         self._obstacles: List[Obstacle] = []
         self._default_lenths: List[int] = [20, 50, 100]
 
         self._obstacles.append(self._generate_an_obstacle_at(position=0))
         self._obstacles.append(self._generate_an_obstacle_at(position=1))
         self._obstacles.append(self._generate_an_obstacle_at(position=1))
+
+        self._bg: TileLayer = TileLayer(BACKGROUND_LAYER, vec_x= -0.5)
+        self._bg.set_position((0, self._rect_top.bottom))
+        self._layer_1: TileLayer = TileLayer(LAYER_1, vec_x= -1.0)
+        self._layer_1.set_position((0, self._rect_bottom.top))
+
+        self._layer_2: TileLayer = TileLayer(LAYER_1, vec_x= -1.0)
+
+        self._layer_2.set_position((0, self._rect_top.bottom -
+                                    self._layer_2.get_layer().
+                                    get_image().get_height()))
+
+        # self._layer_3: TileLayer = TileLayer(BACKGROUND_LAYER)
+        # self._layer_3.set_position((100, self._rect_top.top))
+        # self._layer_3.set_dx(-0.5)
+        # print(SCREEN_HEIGHT * 0.2)
 
     def get_background_rect(self) -> pg.Rect:
         x: float = 0.0
@@ -71,3 +89,20 @@ class BackgroundMap:
             self._obstacles.pop(0)
         for e in self._obstacles:
             e.update(speed=speed)
+        self._bg.update(speed=speed)
+        self._layer_1.update(speed=speed)
+        self._layer_2.update(speed=speed)
+        # self._layer_3.update()
+
+    def render(self, tela: pg.Surface):
+        if tela is None:
+            return
+
+        self._bg.render(tela=tela, loop=True)
+        self._layer_1.render(tela=tela, loop=True)
+        self._layer_2.render(tela=tela, loop=True, invert_y=True)
+        # self._layer_3.render(tela=tela, loop=True, )
+        # tela.fill(WHITE, self.get_limit_top())
+        # tela.fill(WHITE, self.get_limit_bottom())
+        # for element in self.get_obstacles():
+        #     tela.fill(WHITE, element.to_rec())

@@ -158,7 +158,7 @@ class EntityPlayer(EntityMap):
         self.set_curr_row(curr_row=self._get_animation_row())
         super().update()
 
-    def render(self, tela: pg.Surface, color: tuple = (255, 255, 255, 255), opacity: int = 255):
+    def render(self, tela: pg.Surface, color: tuple = (255, 255, 255, 255), opacity: int = None):
         """
         render this object at screen frame (tela)
 
@@ -171,9 +171,11 @@ class EntityPlayer(EntityMap):
         if color is not None:
             self.current_sprite().fill(color=color, special_flags=pg.BLEND_RGBA_MIN)
         self.invert_y = self._g_inverted
-        image = pg.transform.flip(self.current_sprite(), not self.invert_x, self.invert_y,)
-        # tela.blit(image, self.get_position())
-        EntityPlayer.blit_alpha(target=tela, source=image, location=self.get_position(), opacity=opacity)
+        image = pg.transform.flip(self.current_sprite(), not self.invert_x, self.invert_y,).convert()
+        if opacity:
+            EntityPlayer.blit_alpha(target=tela, source=image, location=self.get_position(), opacity=opacity)
+        else:
+            tela.blit(image, self.get_position())
 
     def make_animations_list(self):
         """

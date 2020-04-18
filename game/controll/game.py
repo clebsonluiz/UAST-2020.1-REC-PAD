@@ -12,12 +12,16 @@ class Game:
     def __init__(self, width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title='Game Window'):
         self.Frame = frame.Frame(width, height, title)
         self.clock = pg.time.Clock()
-        self.FPS: float = 30.0
+        self.FPS: float = 60.0
         self.running = False
 
         self.map = BackgroundMap()
         self.player = Player(self.map)
         self.score: int = 0
+
+        self.font_score = pg.font.SysFont("monospace", 20)
+        self.font_credits = pg.font.SysFont("monospace", 15, italic=True)
+        self.font_fps = pg.font.SysFont("monospace", 20, italic=True)
 
     def start(self):
         self.running = True
@@ -43,14 +47,12 @@ class Game:
         if tela is None or not self.player.loaded():
             return
         tela.fill(BLACK)
-        # tela.fill(DARK_GRAY, self.map.get_background_rect())
-        tela.fill(WHITE, self.map.get_limit_top())
-        tela.fill(WHITE, self.map.get_limit_bottom())
-        for element in self.map.get_obstacles():
-            tela.fill(WHITE, element.to_rec())
+        self.map.render(tela=tela)
         self.player.render(tela=tela)
-        tela.blit(pg.font.SysFont("monospace", 20).render('Score: ' + str(self.score), 1, WHITE), (10, 10))
+        tela.blit(self.font_fps.render('FPS: {:.2f}'.format(self.clock.get_fps()), 1, WHITE), (SCREEN_WIDTH - 140, 10))
+        tela.blit(self.font_score.render('Score: ' + str(self.score), 1, WHITE), (10, 10))
         self._credits(tela=tela)
+
         self.Frame.update()
 
         pass
@@ -65,10 +67,14 @@ class Game:
     def _credits(self, tela: pg.Surface = None):
         text = [
             "Sprite Credits: ",
+            "",
             "Hunter Walker (Alien) ",
             "-Ripped by Random Rebel Soldier",
-            "-Tiles assembled by Superblinky."]
-        font: pg.font.Font = pg.font.SysFont("monospace", 15, italic=True)
+            "-assembled by Superblinky.",
+            "Platform tilesheet (Cave) ",
+            "-By Lanea Zimmerman",
+        ]
+        font: pg.font.Font = self.font_credits
         for line in range(len(text)):
             tela.blit(font.render(text[line], 1, WHITE),
                       (10, SCREEN_HEIGHT * 0.75 + 14 * line))

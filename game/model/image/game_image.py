@@ -7,11 +7,11 @@ class GameImage:
     taking into account the massive use of standard method calls
 
     """
-    def __init__(self, file: str = None):
+    def __init__(self, file: str = None, width: int = 0, heigth: int = 0):
         if file is not None:
-            self._image: pg.Surface = pg.image.load(file)
+            self._image: pg.Surface = pg.image.load(file).convert()
         else:
-            self._image: pg.Surface = pg.Surface()
+            self._image: pg.Surface = pg.Surface([width, heigth])
 
     def get_image(self) -> pg.Surface:
         return self._image
@@ -33,7 +33,8 @@ class GameImage:
         image = pg.Surface([width, height]).convert()
         image.set_colorkey(BLACK)
         image.blit(self._image, (0, 0), (x, y, width, height))
-        image = pg.transform.flip(image, invert_x, invert_y)
+        if invert_x or invert_y:
+            image = pg.transform.flip(image, invert_x, invert_y).convert()
         return image
 
     def flip(self, invert_x: bool = False, invert_y: bool = False) -> pg.Surface:
@@ -42,7 +43,9 @@ class GameImage:
         :param invert_y: y axis
         :return: image flipped
         """
-        return pg.transform.flip(self._image, invert_x, invert_y)
+        if invert_x or invert_y:
+            return pg.transform.flip(self._image, invert_x, invert_y).convert()
+        return self._image
 
     @staticmethod
     def from_pygame_surface(file: pg.Surface):
