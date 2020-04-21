@@ -28,6 +28,7 @@ class EntityAnimation(ABC):
         self._curr_row: int = 0
         self.curr_width: int = curr_width
         self.curr_height: int = curr_height
+        self._padding: pg.Rect = pg.Rect(0, 0, 0, 0)
 
     def insert(self, frames: List[pg.SurfaceType], loop: bool = True):
         """
@@ -97,9 +98,15 @@ class EntityAnimation(ABC):
         """
         self._vec_y = sum([self._vec_x, x])
 
+    def set_colision_padding(self, padding: pg.Rect = pg.Rect(0, 0, 0, 0)):
+        """
+        :param padding: pygame Rect used to set padding size of the colision box from object
+        """
+        self._padding = padding
+
     def to_rect(self, x: float = None, y: float = None) -> pg.Rect:
         """
-        Generates a colison pygame rect of a entity
+        Generates a colison pygame rect of a entity with the padding
 
         :return: a pygame Rect with xy positions and size
         """
@@ -110,7 +117,17 @@ class EntityAnimation(ABC):
             self.curr_height = self.current_sprite().get_height()
         if self.curr_width is 0:
             self.curr_width = self.current_sprite().get_width()
-        return pg.rect.Rect(x, y, self.curr_width, self.curr_height)
+
+        width = self.curr_width
+        height = self.curr_height
+
+        if self._padding is None:
+            self._padding = pg.Rect(0, 0, 0, 0)
+
+        return pg.rect.Rect(x - self._padding.left,
+                            y - self._padding.top,
+                            width - self._padding.right,
+                            height - self._padding.bottom)
 
     def set_curr_row(self, curr_row: int = 0):
         """

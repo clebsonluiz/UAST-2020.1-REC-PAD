@@ -16,6 +16,9 @@ class GameImage:
     def get_image(self) -> pg.Surface:
         return self._image
 
+    def set_image(self, image: pg.Surface):
+        self._image = image
+
     def get_especifc_frame(self,
                            x: int = 0, y: int = 0,
                            width: int = 0, height: int = 0,
@@ -41,7 +44,7 @@ class GameImage:
         """
         :param invert_x: x axis
         :param invert_y: y axis
-        :return: image flipped
+        :return: image flipped if the x or y axis is True,
         """
         if invert_x or invert_y:
             return pg.transform.flip(self._image, invert_x, invert_y).convert()

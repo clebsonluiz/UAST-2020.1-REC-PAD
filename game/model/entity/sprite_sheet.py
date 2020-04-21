@@ -12,7 +12,7 @@ class SpriteSheetEntity(EntityAnimation, ABC):
     ______________
 
     Represents the basic components that make up an animated entity
-    in motion with animation on the map
+    in motion with animation on the layer
     """
 
     def __init__(self, file: str, invert_x: bool = False, invert_y: bool = False):

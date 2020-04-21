@@ -1,6 +1,6 @@
 import pygame as pg
 
-from ..map import BackgroundMap
+from ..layer import BackgroundMap
 from ..entity import EntityMap
 
 
@@ -29,13 +29,13 @@ class EntityPlayer(EntityMap):
         """
         :return: value will be used to make the stop jump movement
         """
-        return self._g_value() * 0.4
+        return self._g_value() * 0.3
 
     def _fall_speed(self) -> float:
         """
         :return: value will be used to make the speed of falling after jump
         """
-        return self._g_value() * 0.3
+        return self._g_value() * 0.25
 
     def _max_fall_speed(self) -> float:
         """
@@ -188,10 +188,10 @@ class EntityPlayer(EntityMap):
             jmp_p_x=2, jmp_p_y=0
         )
         s_matrix_jumping_falling = self.build(
-            t_width=37, t_height=46,
+            t_width=49, t_height=46,
             cols=9, rows=2,
-            i_x=10, i_y=94,
-            jmp_p_x=12, jmp_p_y=18
+            i_x=3, i_y=94,
+            jmp_p_x=0, jmp_p_y=18
         )
         s_list_walking = EntityMap.sprite_list(
             from_list=s_matrix_walking,

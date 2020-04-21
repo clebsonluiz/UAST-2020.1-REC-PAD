@@ -1,13 +1,31 @@
 import pygame as pg
 
 from typing import List
-from ..image import game_image as img
+from ...image import game_image as img
 from .tile_image import TileImage
 
 
 class TileLayer:
+    """
+    Class TileLayer for build the background layers will render on map
 
-    def __init__(self, tile_map: List[List[int]], vec_x: float = 0, vec_y: float = 0, ):
+    Parameters
+    __________
+        tile_map : List[List[float]]
+            Matrix of float tiles
+        vec_x : float
+            x direction when layer is moved
+        vec_y : float
+            y direction when layer is moved
+        invert_x : bool
+            inverts the layer image in xAxis
+        invert_y : bool
+            inverts the layer image in yAxis
+    """
+
+    def __init__(self, tile_map: List[List[float]],
+                 vec_x: float = 0, vec_y: float = 0,
+                 invert_x: bool = False, invert_y: bool = False):
         self._layer: img.GameImage = img.GameImage.from_pygame_surface(
             TileImage().build_surface(tiles=tile_map)
         )
@@ -15,6 +33,8 @@ class TileLayer:
         self.pos_y: float = 0
         self._vec_x: float = vec_x
         self._vec_y: float = vec_y
+        if invert_x or invert_y:
+            self._layer.set_image(self._layer.flip(invert_x=invert_x, invert_y=invert_y))
 
     def get_position(self) -> tuple:
         """
@@ -102,6 +122,12 @@ class TileLayer:
                           (self.pos_x - image.get_width(), self.pos_y))
 
     def update(self, speed: float = 1.0):
+        """
+        Used for updates the movement of the layer on map.
+        this consideres loop
+
+        :param speed: speed movement
+        """
         i_width = self._layer.get_image().get_width()
         i_height = self._layer.get_image().get_height()
 
@@ -122,4 +148,7 @@ class TileLayer:
             self.pos_y += self._vec_y * speed
 
     def get_layer(self) -> img.GameImage:
+        """
+        :return: the GameImage layer
+        """
         return self._layer

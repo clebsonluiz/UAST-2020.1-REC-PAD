@@ -2,7 +2,7 @@ import pygame as pg
 
 from game.constants import *
 
-from ..map import BackgroundMap
+from ..layer import BackgroundMap
 from .entity_player import EntityPlayer
 
 
@@ -14,10 +14,10 @@ class Player:
     Parameters
     __________
     background: BackgroundMap
-        Colision map of this object to the checks his position in screen
+        Colision layer of this object to the checks his position in screen
     """
-    def __init__(self, background: BackgroundMap):
 
+    def __init__(self, background: BackgroundMap):
         self.player = EntityPlayer(background, )
         self.shadow = EntityPlayer(background, invert_gravity=True)
 
@@ -32,6 +32,12 @@ class Player:
         self.player.curr_width = 50
         self.shadow.curr_height = self.player.curr_height
         self.shadow.curr_width = self.player.curr_width
+        self.player.set_colision_padding(
+            pg.Rect(-20, 0, 45, 0)
+        )
+        self.shadow.set_colision_padding(
+            pg.Rect(-20, 0, 45, 0)
+        )
 
     def loaded(self) -> bool:
         """
@@ -74,8 +80,17 @@ class Player:
         """
         if tela is None or not self.loaded():
             return
+
+        # pg.draw.ellipse(tela, WHITE, self.player.to_rect(), 0, )
+        # tela.fill((255, 255, 255), self.player.to_rect())
         self.shadow.render(tela=tela, color=DARK_GRAY, opacity=200)
         self.player.render(tela=tela)
+
+    def to_rect(self) -> pg.Rect:
+        """
+        :return: the player pg.Rect colision
+        """
+        return self.player.to_rect()
 
     def make_animations_list(self):
         """
