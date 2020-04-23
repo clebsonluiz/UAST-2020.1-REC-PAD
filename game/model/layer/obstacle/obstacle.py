@@ -5,6 +5,7 @@ import pygame as pg
 from ..builder import TileLayer
 
 from ..background import BackgroundLayers
+from ...score.coin import Coin
 
 
 class Obstacle(TileLayer):
@@ -36,6 +37,19 @@ class Obstacle(TileLayer):
         self._curr_width = self.get_layer().get_image().get_width()
         self._padding: pg.Rect = pg.Rect(0, 0, 0, 0)
         self._bg_layers: BackgroundLayers = background_layers
+        self._coin = None
+        self._coin_colision: bool = False
+
+    def get_coin(self) -> Coin:
+        return self._coin
+
+    def make_coin_colision(self):
+        self._coin_colision = True
+
+    def build_star(self, position_up: bool):
+        self._coin = Coin(is_on_top=position_up)
+        self._coin.set_position_on_rect_obstacle(self)
+        self._coin.set_dx(self.get_dx())
 
     def set_colision_padding(self, padding: pg.Rect = pg.Rect(0, 0, 0, 0)):
         """
@@ -91,6 +105,10 @@ class Obstacle(TileLayer):
         """
         self.pos_x += self._vec_x * speed
         self.pos_y += self._vec_y * speed
+        if not self._coin_colision:
+            self._coin.set_dx(self.get_dx() * speed)
+            self._coin.update()
+
         if self.pos_x <= 0.0:
             pass
         # else:
@@ -113,3 +131,11 @@ class Obstacle(TileLayer):
         rect: pg.Rect = self._bg_layers.get_intern_rect()
 
         return rect.top - size_h if position_up else rect.bottom - size_h
+
+    def render(self, tela: pg.Surface,
+               color: tuple = (255, 255, 255, 255),
+               invert_x: bool = False, invert_y: bool = False,
+               loop: bool = False):
+        if not self._coin_colision:
+            self.get_coin().render(tela=tela)
+        super().render(tela=tela)

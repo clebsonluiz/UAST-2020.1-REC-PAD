@@ -17,7 +17,6 @@ from game.constants import \
 
 
 class ObstacleConstruct:
-
     """
     ObstacleConstruct Class
     _______________________
@@ -82,6 +81,7 @@ class ObstacleConstruct:
         obs.set_colision_padding(
             pg.Rect(0, -20 if position_up else -25, 0, 64)
         )
+        obs.build_star(position_up=position_up)
         return obs
 
     def get_obstacles(self) -> List[Obstacle]:
