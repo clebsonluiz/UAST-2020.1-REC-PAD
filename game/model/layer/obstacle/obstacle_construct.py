@@ -30,16 +30,59 @@ class ObstacleConstruct:
     def __init__(self, background_layers: BackgroundLayers = None):
         self._BACKGROUND_LAYERS: BackgroundLayers = background_layers
         self._OBSTACLES: List[Obstacle] = []
-        self._top_obstacle_matrix_list = [
-            MATRIX_OBSTACLE_1_TOP,
-            MATRIX_OBSTACLE_2_TOP,
+        self._top_obstacle_matrix_list = []
+        self._bottom_obstacle_matrix_list = []
+        self._lowest_dist: int = 200
+        self._biggest_dist: int = 300
+        self._top_or_bottom = None
+        self._dificult_type = None
+        self.set_dificult_type('easy')
+
+    def _dificult_type_1(self):
+        self._top_obstacle_matrix_list.append(
+            MATRIX_OBSTACLE_1_TOP
+        )
+        self._bottom_obstacle_matrix_list.append(
+            MATRIX_OBSTACLE_1_BOTTOM
+        )
+        self._lowest_dist: int = 300
+        self._biggest_dist: int = 500
+        self._top_or_bottom = [False, False]
+        self._dificult_type = 'easy'
+
+    def _dificult_type_2(self):
+        self._top_obstacle_matrix_list.append(
+            MATRIX_OBSTACLE_2_TOP
+        )
+        self._bottom_obstacle_matrix_list.append(
+            MATRIX_OBSTACLE_2_BOTTOM
+        )
+        self._lowest_dist: int = 350
+        self._biggest_dist: int = 600
+        self._top_or_bottom = [False, True]
+        self._dificult_type = 'normal'
+
+    def _dificult_type_3(self):
+        self._top_obstacle_matrix_list.append(
             MATRIX_OBSTACLE_3_TOP
-        ]
-        self._bottom_obstacle_matrix_list = [
-            MATRIX_OBSTACLE_1_BOTTOM,
-            MATRIX_OBSTACLE_2_BOTTOM,
+        )
+        self._bottom_obstacle_matrix_list.append(
             MATRIX_OBSTACLE_3_BOTTOM
-        ]
+        )
+        self._lowest_dist: int = 500
+        self._biggest_dist: int = 800
+        self._top_or_bottom = [False, True]
+        self._dificult_type = 'hard'
+
+    def set_dificult_type(self, dificult: str):
+        if dificult is self._dificult_type:
+            return
+        if dificult is 'easy':
+            self._dificult_type_1()
+        elif dificult is 'normal':
+            self._dificult_type_2()
+        elif dificult is 'hard':
+            self._dificult_type_3()
 
     def _generate_distance(self) -> int:
         """
@@ -47,7 +90,7 @@ class ObstacleConstruct:
 
         :return: the int distance in x axis
         """
-        dist = next_int(250, 500)  # Gerar uma distãncia entre obstaculos
+        dist = next_int(self._lowest_dist, self._biggest_dist)  # Gerar uma distãncia entre obstaculos
         if len(self._OBSTACLES) is not 0:
             return self._OBSTACLES[-1].get_last_distance(default=dist)
         return SCREEN_WIDTH
@@ -59,7 +102,8 @@ class ObstacleConstruct:
         :param position_up: if the matrix is a top matrix
         :return: the matrix List[List[float]]
         """
-        index: int = next_int(0, 2)
+        limit = len(self._top_obstacle_matrix_list) + len(self._bottom_obstacle_matrix_list)
+        index: int = next_int(0, (limit / 2) - 1)
         if position_up:
             return self._top_obstacle_matrix_list[index]
         return self._bottom_obstacle_matrix_list[index]
@@ -81,7 +125,7 @@ class ObstacleConstruct:
         obs.set_colision_padding(
             pg.Rect(0, -20 if position_up else -25, 0, 64)
         )
-        obs.build_star(position_up=position_up)
+        obs.build_coin(position_up=position_up)
         return obs
 
     def get_obstacles(self) -> List[Obstacle]:
@@ -122,7 +166,7 @@ class ObstacleConstruct:
             self.get_obstacles().append(self._generate_obstacle())
 
         self._OBSTACLES.append(
-            self._generate_obstacle([False, True][next_int(0, 1)])
+            self._generate_obstacle(self._top_or_bottom[next_int(0, 1)])
         )
         return self._OBSTACLES
 

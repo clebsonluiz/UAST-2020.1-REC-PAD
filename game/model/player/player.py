@@ -39,6 +39,22 @@ class Player:
             pg.Rect(-20, 0, 45, 0)
         )
 
+        self._player_score: int = 0
+
+    def increment_score(self):
+        """Increments the score of player"""
+        self._player_score += 1
+
+    def get_score(self) -> int:
+        """
+        :return: gets the score of player
+        """
+        return self._player_score
+
+    def decrement_score(self):
+        """Decrements the score of player"""
+        self._player_score -= 1
+
     def loaded(self) -> bool:
         """
         :return: bool value, true if this object as ready to be rendenized in screen

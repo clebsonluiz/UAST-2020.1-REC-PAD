@@ -5,7 +5,6 @@ from game.constants import *
 
 from game.model.layer import BackgroundMap
 from game.model.player import Player
-from game.model.score.coin import Coin
 
 
 class Game:
@@ -18,12 +17,13 @@ class Game:
 
         self.map = BackgroundMap()
         self.player = Player(self.map)
-        self.score: int = 0
-        self._coin_score: Coin = Coin()
-        self._coin_score.set_position((10, 12))
+        self.map_speed = 3.0
         self.font_score = pg.font.SysFont("monospace", 20)
         self.font_credits = pg.font.SysFont("monospace", 12, italic=True)
         self.font_fps = pg.font.SysFont("monospace", 20, italic=True)
+
+    def increment_speed(self):
+        self.map_speed += 0.0002
 
     def start(self):
         self.running = True
@@ -52,36 +52,24 @@ class Game:
         self.map.render(tela=tela)
         self.player.render(tela=tela)
         tela.blit(self.font_fps.render('FPS: {:.2f}'.format(self.clock.get_fps()), 1, WHITE), (SCREEN_WIDTH - 140, 10))
-        self._coin_score.render(tela=tela)
-        tela.blit(self.font_score.render(' x ' + str(self.score), 1, WHITE), (20, 10))
+        tela.blit(self.font_score.render(' x ' + str(self.player.get_score()), 1, WHITE), (20, 10))
         self._credits(tela=tela)
-        obs = self.map.get_obstacles()[0]
-        if obs.to_rect().colliderect(self.player.to_rect()):
-            tela.blit(self.font_fps.render('COLIDINDO', 1, WHITE),
-                      (SCREEN_WIDTH - 140, 30))
+        tela.blit(self.font_fps.render('Speed: {:.3f}'.format(self.map_speed), 1, WHITE),
+                  (SCREEN_WIDTH - 140, 30))
+        # obs = self.map.get_obstacles()[0]
+        # if obs.to_rect().colliderect(self.player.to_rect()):
+        #     tela.blit(self.font_fps.render('COLIDINDO', 1, WHITE),
+        #               (SCREEN_WIDTH - 140, 30))
         self.Frame.update()
         pass
 
     def _update(self):
-        self._coin_score.update()
-        if self.map.get_obstacles()[0].is_out_screen():
-            self.score += 1
-        self.map.update(speed=1.5)
+        self.map.update(speed=self.map_speed)
         self.player.update()
         pass
 
     def _credits(self, tela: pg.Surface = None):
-        text = [
-            "Sprites Credits: ",
-            "",
-            "Hunter Walker (Alien) ",
-            "-Ripped by Random Rebel Soldier",
-            "-assembled by Superblinky.",
-            "Platform tilesheet (Cave) ",
-            "-By Lanea Zimmerman",
-            "Platform tilesheet (Coin)",
-            "-By Puddin"
-        ]
+        text = self.map.get_credits()
         font: pg.font.Font = self.font_credits
         for line in range(len(text)):
             tela.blit(font.render(text[line], 1, WHITE),

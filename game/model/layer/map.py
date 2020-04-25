@@ -18,6 +18,22 @@ class BackgroundMap:
         self.ObstacleBuilder = ObstacleConstruct(background_layers=self.BgLayers)
         self.ObstacleBuilder.generate(self.BgLayers, firsts=True)
 
+        self._credits = [
+            "Sprites Credits: ",
+            "",
+            "Hunter Walker (Alien) ",
+            "-Ripped by Random Rebel Soldier",
+            "-assembled by Superblinky.",
+            "Platform tilesheet (Cave) ",
+            "-By Lanea Zimmerman",
+            "Platform tilesheet (Coin)",
+            "-By Puddin"
+        ]
+
+        from ..score.coin import Coin
+        self._coin_score: Coin = Coin()
+        self._coin_score.set_position((10, 12))
+
     def get_background_rect(self) -> pg.Rect:
         """
         Gets the pygame.Rect of intern background of between
@@ -48,6 +64,7 @@ class BackgroundMap:
         """
         Updates the layers and obstacles with the same speed
         """
+        self._coin_score.update()
         self.BgLayers.update(speed=speed)
         self.ObstacleBuilder.update(speed=speed)
 
@@ -57,5 +74,13 @@ class BackgroundMap:
 
         :param tela: pygame Surface when the layers and obstacles are drawed in
         """
+        self._coin_score.render(tela=tela)
         self.BgLayers.render(tela=tela)
         self.ObstacleBuilder.render(tela=tela)
+
+    def get_credits(self) -> List[str]:
+        """
+        String list with the credits of sprites useds
+        :return: list of str elements
+        """
+        return self._credits

@@ -43,10 +43,13 @@ class Obstacle(TileLayer):
     def get_coin(self) -> Coin:
         return self._coin
 
+    def coin_still_in_obstacle(self):
+        return not self._coin_colision
+
     def make_coin_colision(self):
         self._coin_colision = True
 
-    def build_star(self, position_up: bool):
+    def build_coin(self, position_up: bool):
         self._coin = Coin(is_on_top=position_up)
         self._coin.set_position_on_rect_obstacle(self)
         self._coin.set_dx(self.get_dx())
