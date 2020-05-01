@@ -17,7 +17,7 @@ class BackgroundMap:
         self.BgLayers = BackgroundLayers()
         self.ObstacleBuilder = ObstacleConstruct(background_layers=self.BgLayers)
         self.ObstacleBuilder.generate(self.BgLayers, firsts=True)
-
+        self._speed: float = 1.0
         self._credits = [
             "Sprites Credits: ",
             "",
@@ -64,6 +64,8 @@ class BackgroundMap:
         """
         Updates the layers and obstacles with the same speed
         """
+        if (self._speed is not speed) and (speed is not None):
+            self._speed = speed
         self._coin_score.update()
         self.BgLayers.update(speed=speed)
         self.ObstacleBuilder.update(speed=speed)
@@ -84,3 +86,6 @@ class BackgroundMap:
         :return: list of str elements
         """
         return self._credits
+
+    def get_curr_map_speed(self):
+        return self._speed

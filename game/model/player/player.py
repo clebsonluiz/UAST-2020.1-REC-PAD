@@ -4,6 +4,7 @@ from game.constants import *
 
 from ..layer import BackgroundMap
 from .entity_player import EntityPlayer
+from .sensor import Sensor
 
 
 class Player:
@@ -16,10 +17,11 @@ class Player:
     background: BackgroundMap
         Colision layer of this object to the checks his position in screen
     """
-
     def __init__(self, background: BackgroundMap):
         self.player = EntityPlayer(background, )
         self.shadow = EntityPlayer(background, invert_gravity=True)
+
+        self._sensor = Sensor(player=self, background_map=background)
 
         self.make_animations_list()
 
@@ -40,6 +42,16 @@ class Player:
         )
 
         self._player_score: int = 0
+
+    def get_sensor(self) -> Sensor:
+        """
+        The sensor is a class that produces the necessary methods
+        to do a information and distribute her's to a Neural Network.
+        Getting the Distance of First Obstacle, his size and Map Speed
+
+        :return: sensor object from this entity
+        """
+        return self._sensor
 
     def increment_score(self):
         """Increments the score of player"""
@@ -83,10 +95,11 @@ class Player:
 
     def update(self):
         """
-        Updates the current stats of player and his shadow
+        Updates the current status of player, his shadow and the 'sensor'
         """
         self.player.update()
         self.shadow.update()
+        self._sensor.update()
 
     def render(self, tela: pg.Surface):
         """
