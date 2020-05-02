@@ -1,4 +1,5 @@
 from ..entity import EntityMap
+from ...constants import YELLOW, get_render_type
 
 import pygame as pg
 
@@ -40,7 +41,10 @@ class Coin(EntityMap):
         """
         if tela is None:
             return
-        tela.blit(self.current_sprite(), self.get_position())
+        if get_render_type().get('COLISION'):
+            tela.fill(YELLOW, self.to_rect())
+        if get_render_type().get('NORMAL'):
+            tela.blit(self.current_sprite(), self.get_position())
 
     def make_animations_list(self):
         """

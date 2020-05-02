@@ -112,8 +112,12 @@ class Player:
 
         # pg.draw.ellipse(tela, WHITE, self.player.to_rect(), 0, )
         # tela.fill((255, 255, 255), self.player.to_rect())
-        self.shadow.render(tela=tela, color=DARK_GRAY, opacity=200)
-        self.player.render(tela=tela)
+        if get_render_type().get('COLISION'):
+            pg.draw.ellipse(tela, WHITE, self.shadow.to_rect(), 2)
+            pg.draw.ellipse(tela, WHITE, self.player.to_rect(), 0)
+        if get_render_type().get('NORMAL'):
+            self.shadow.render(tela=tela, color=DARK_GRAY, opacity=200)
+            self.player.render(tela=tela)
 
     def to_rect(self) -> pg.Rect:
         """

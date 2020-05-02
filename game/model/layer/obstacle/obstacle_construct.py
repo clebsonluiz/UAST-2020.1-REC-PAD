@@ -13,7 +13,7 @@ from game.constants import \
     MATRIX_OBSTACLE_1_BOTTOM, \
     MATRIX_OBSTACLE_2_BOTTOM, \
     MATRIX_OBSTACLE_3_BOTTOM, \
-    SCREEN_WIDTH, WHITE
+    SCREEN_WIDTH, WHITE, YELLOW, get_render_type
 
 
 class ObstacleConstruct:
@@ -194,5 +194,9 @@ class ObstacleConstruct:
         """
         if tela:
             for e in self.get_obstacles():
-                # tela.fill(WHITE, e.to_rect())
-                e.render(tela=tela)
+                if get_render_type().get('COLISION'):
+                    tela.fill(WHITE, e.to_rect())
+                    if e.coin_still_in_obstacle():
+                        tela.fill(YELLOW, e.get_coin().to_rect())
+                if get_render_type().get('NORMAL'):
+                    e.render(tela=tela)

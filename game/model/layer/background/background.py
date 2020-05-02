@@ -82,6 +82,10 @@ class BackgroundLayers:
         """
         if tela is None:
             return
-        self._bg.render(tela=tela, loop=True)
-        self._layer_1.render(tela=tela, loop=True)
-        self._layer_2.render(tela=tela, loop=True)
+        if get_render_type().get('COLISION'):
+            tela.fill(WHITE, self._layer_1.to_rect())
+            tela.fill(WHITE, self._layer_2.to_rect())
+        if get_render_type().get('NORMAL'):
+            self._bg.render(tela=tela, loop=True)
+            self._layer_1.render(tela=tela, loop=True)
+            self._layer_2.render(tela=tela, loop=True)

@@ -74,13 +74,13 @@ class DefaultLevel:
         self.bg_map.render(tela=tela)
         self.player.render(tela=tela)
 
-        pg.draw.line(tela, (255, 255, 255),
-                     self.player.get_sensor().get_center_pos_player(),
-                     self.player.get_sensor().get_first_obstacle().to_rect().center)
-
-        pg.draw.line(tela, (255, 255, 255),
-                     self.player.get_sensor().get_center_pos_shadow(),
-                     self.player.get_sensor().get_first_obstacle().to_rect().center)
+        # pg.draw.line(tela, (255, 255, 255),
+        #              self.player.get_sensor().get_center_pos_player(),
+        #              self.player.get_sensor().get_first_obstacle().to_rect().center)
+        #
+        # pg.draw.line(tela, (255, 255, 255),
+        #              self.player.get_sensor().get_center_pos_shadow(),
+        #              self.player.get_sensor().get_first_obstacle().to_rect().center)
 
     def _load(self,
               player: Player = None,

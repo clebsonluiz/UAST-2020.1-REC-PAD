@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 ASSETS_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/assets/"
 
@@ -11,6 +12,8 @@ WHITE = (255, 255, 255, 255)
 BLUE = (0, 0, 255, 255)
 GREEN = (0, 255, 0, 255)
 RED = (255, 0, 0, 255)
+YELLOW = (255, 255, 0, 255)
+
 
 """
 Color will be used to make the impression 
@@ -74,3 +77,21 @@ MATRIX_OBSTACLE_2_TOP = [
 MATRIX_OBSTACLE_3_TOP = [
     [-7, 9, -5], [16, 17, 18], [23, 23, 23],
 ]
+
+_RENDER_LIST_TYPE = {
+    'NORMAL': True,
+    'DEBUG': False,
+    'COLISION': False,
+    'NEURAL': False,
+}
+
+
+def set_render_type(values: Dict[str, bool]):
+    for e in values:
+        b: bool = values[e]
+        if get_render_type().get(e) is not None:
+            get_render_type()[e] = b
+
+
+def get_render_type() -> Dict[str, bool]:
+    return _RENDER_LIST_TYPE

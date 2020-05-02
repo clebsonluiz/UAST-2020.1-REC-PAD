@@ -6,11 +6,12 @@ __credits__ = 'Todos os sprites ou imagens usadas são de creditos dos seus cria
 import pygame as pg
 
 from game.controll.game import Game
-
+from game.constants import set_render_type
 
 pg.init()
 
 try:
+    set_render_type({'NORMAL': True, 'COLISION': False})
     game = Game()
     game.start()
 except Exception as ex:
