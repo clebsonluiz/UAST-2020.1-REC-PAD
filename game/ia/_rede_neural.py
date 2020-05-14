@@ -25,28 +25,28 @@ class _FuncaoAtivacao:
         from math import exp
         return 1 / (1 + exp(-t))
 
+    @staticmethod
+    def conditional(matrix, value):
+        return lambda r: matrix[r][0] > value
+
 
 class RedeNeural:
 
     def __init__(self, individuo):
         from ._individuo import Individuo
-        from ..model.player.sensor import Sensor
         self._individuo: Individuo = individuo
-        self._sensor: Sensor = individuo.get_sensor()
-        self._cromossomo: Dict = individuo.cromossomo
         self.BIAS = 1.0
 
     def get_entradas_matrix(self) -> Matrix:
         return Matrix([
-            [self.BIAS],
-            [self._sensor.get_curr_dist_shadow_to_obstacle()],
-            [self._sensor.get_curr_dist_player_to_obstacle()],
-            [self._sensor.get_curr_width_of_obstacle()],
-            [self._sensor.get_curr_speed()]
+            [self._individuo.get_sensor().get_curr_dist_shadow_to_obstacle()],
+            [self._individuo.get_sensor().get_curr_dist_player_to_obstacle()],
+            [self._individuo.get_sensor().get_curr_width_of_obstacle()],
+            [self._individuo.get_sensor().get_curr_speed()]
         ])
 
     def _gene(self, key):
-        return self._cromossomo[key]
+        return self._individuo.cromossomo[key]
 
     def get_pesos_entradas_matrix(self) -> Matrix:
         return Matrix([
@@ -68,29 +68,41 @@ class RedeNeural:
 
     def get_pesos_neurais_matrix(self) -> Matrix:
         return Matrix([
-            [self._gene('GF01'), self._gene('GF11')],
-            [self._gene('GF02'), self._gene('GF12')],
+            [self._gene('GF01'), self._gene('GF11'), self._gene('GF21')],
+            [self._gene('GF02'), self._gene('GF12'), self._gene('GF22')],
         ])
 
     def get_individuo(self):
         return self._individuo
 
-    def action(self):
-
+    def update(self):
+        """
+        """
+        # Camada de Entradas da rede neural junto com o viés BIAS
         entradas: Matrix = self.get_entradas_matrix()
+        entradas.get().insert(0, [self.BIAS])
+
+        # Pesos da camada de entrada e da camada oculta
         pesos_entradas: Matrix = self.get_pesos_entradas_matrix()
         pesos_oculta: Matrix = self.get_pesos_neurais_matrix()
 
+        # Camada oculta, OCULTA = ENTRADAS * PESOS_ENTRADAS da rede neural junto com o viés BIAS
         oculta: Matrix = pesos_entradas.mult(entradas)
-        RedeNeural.anulator_negatives(oculta)
+        oculta.get().insert(0, [self.BIAS])
+        # Função de Ativação usada para atualizar os valores
+        oculta.map(_FuncaoAtivacao.sigmoid)
+
+        # Camada de saida, SAIDA = OCULTA * PESOS_OCULTA
         saida: Matrix = pesos_oculta.mult(oculta)
+        # Aplicação da Função de Ativação
+        saida.map(_FuncaoAtivacao.sigmoid)
 
-        u_1 = saida.get()[0][0]
-        u_2 = saida.get()[1][0]
+        # Execução da função de ativação, se usada a sigmoid logo valor da entrada deve ser maior que 0.5
+        fa = _FuncaoAtivacao.conditional(saida.get(), 0.5)
 
-        if _FuncaoAtivacao.degrau(u_1):
+        if fa(r=0):
             self._individuo.do_jump()
-        if _FuncaoAtivacao.degrau(u_2):
+        if fa(r=1):
             self._individuo.do_change_gravit()
 
     @staticmethod

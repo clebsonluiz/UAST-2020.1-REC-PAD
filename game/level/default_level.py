@@ -91,7 +91,10 @@ class DefaultLevel:
         :param player: player object
         :param background_map: map object
         """
-        self.bg_map = background_map if background_map else BackgroundMap()
+        if background_map or self.bg_map is None:
+            self.bg_map = background_map if background_map else BackgroundMap()
+        else:
+            self.bg_map.ObstacleBuilder.reset()
         self.player = player if player else Player(background=self.bg_map)
 
         self.speed = 3.0

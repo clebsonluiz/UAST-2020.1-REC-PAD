@@ -5,6 +5,7 @@ import game.model.file as _FILE
 
 from ..model.player import Player
 from ..model.layer import BackgroundMap
+from ._rede_neural import RedeNeural
 
 
 class Individuo(Player):
@@ -15,9 +16,44 @@ class Individuo(Player):
                  numero: int = -1, geracao: int = -1,
                  ):
         super().__init__(background=background)
+        self.background: BackgroundMap = background
         self.numero: int = numero
         self.geracao: int = geracao
         self.cromossomo: Dict = cromossomo
+        self.cerebro: RedeNeural = RedeNeural(individuo=self)
+
+    def create_cromossomo(self, randomize: bool = False):
+        var: Dict = {
+            'GN01': 0, 'GN02': 0,
+            'GN11': 0, 'GN12': 0,
+            'GN21': 0, 'GN22': 0,
+            'GN31': 0, 'GN32': 0,
+            'GN41': 0, 'GN42': 0,
+
+            'GF01': 0, 'GF11': 0,
+            'GF02': 0, 'GF12': 0,
+            'GF21': 0, 'GF22': 0,
+        }
+
+        if randomize:
+            from random import random as r, randint
+            for k in var:
+                var[k] = int(r() * (-1 if(randint(0, 1)) else 1))
+
+        if self.cromossomo is None or len(self.cromossomo) == 0:
+            self.cromossomo = var
+            return self.cromossomo
+        return var
+
+    def update(self):
+        super().update()
+        self.cerebro.update()
+
+    def clone(self) -> 'Individuo':
+        return Individuo(self.background,
+                         cromossomo=self.cromossomo.copy(),
+                         numero=self.numero,
+                         geracao=self.geracao)
 
     def to_json(self) -> Dict:
         return {
@@ -51,3 +87,8 @@ class Individuo(Player):
                          numero=numero if (numero is not None) else -1,
                          geracao=geracao if (geracao is not None) else -1,
                          cromossomo=cromossomo)
+
+    # @staticmethod
+    # def random(interval: tuple):
+    #     var = interval
+    #     return r() if var is None or len(var) < 2 else randint(var[0], var[1])

@@ -69,3 +69,26 @@ class Matrix:
     @staticmethod
     def empty(rows=2, cols=2) -> 'Matrix':
         return Matrix([[0 for c in range(cols)] for r in range(rows)])
+
+    def map(self, function):
+        assert function is not None
+        for r in range(self._rows):
+            for c in range(self._cols):
+                self._matrix[r][c] = function(self._matrix[r][c])
+
+    def __add__(self, other):
+        if type(other) is type(self):
+            return self.sum(matrix=other)
+        return None
+
+    def __sub__(self, other):
+        if type(other) is type(self):
+            return self.sub(matrix=other)
+        return None
+
+    def __mul__(self, other):
+        if isinstance(other, (float, int)):
+            return self.mult(value=other)
+        elif isinstance(other, Matrix):
+            return self.mult(matrix=other)
+        return None

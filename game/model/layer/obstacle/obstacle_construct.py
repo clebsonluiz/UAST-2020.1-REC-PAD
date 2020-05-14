@@ -84,13 +84,16 @@ class ObstacleConstruct:
         elif dificult is 'hard':
             self._dificult_type_3()
 
-    def _generate_distance(self) -> int:
+    def _generate_distance(self, firsts: bool = False) -> int:
         """
         Generate the distance between obstacles
 
         :return: the int distance in x axis
         """
-        dist = next_int(self._lowest_dist, self._biggest_dist)  # Gerar uma distãncia entre obstaculos
+        if firsts:
+            dist = self._lowest_dist
+        else:
+            dist = next_int(self._lowest_dist, self._biggest_dist)  # Gerar uma distãncia entre obstaculos
         if len(self._OBSTACLES) is not 0:
             return self._OBSTACLES[-1].get_last_distance(default=dist)
         return SCREEN_WIDTH
@@ -108,7 +111,7 @@ class ObstacleConstruct:
             return self._top_obstacle_matrix_list[index]
         return self._bottom_obstacle_matrix_list[index]
 
-    def _generate_obstacle(self, position_up: bool = False) -> Obstacle:
+    def _generate_obstacle(self, position_up: bool = False, firsts: bool = False) -> Obstacle:
         """
         Generates a new Obstacle
 
@@ -120,7 +123,7 @@ class ObstacleConstruct:
             self.get_bg_layers(),
             dx=-1.0, dy=0.0,
         )
-        obs.pos_x = self._generate_distance()
+        obs.pos_x = self._generate_distance(firsts=firsts)
         obs.pos_y = obs.my_relative_positon_on_map(position_up)
         obs.set_colision_padding(
             pg.Rect(0, -20 if position_up else -25, 0, 64)
@@ -161,9 +164,10 @@ class ObstacleConstruct:
         """
         self.set_bg_layers(bg_layers)
         if firsts:
-            self.get_obstacles().append(self._generate_obstacle())
-            self.get_obstacles().append(self._generate_obstacle(position_up=True))
-            self.get_obstacles().append(self._generate_obstacle())
+            self.get_obstacles().clear()
+            self.get_obstacles().append(self._generate_obstacle(firsts=firsts))
+            self.get_obstacles().append(self._generate_obstacle(position_up=True, firsts=firsts))
+            self.get_obstacles().append(self._generate_obstacle(firsts=firsts))
 
         self._OBSTACLES.append(
             self._generate_obstacle(self._top_or_bottom[next_int(0, 1)])
@@ -200,3 +204,11 @@ class ObstacleConstruct:
                         tela.fill(YELLOW, e.get_coin().to_rect())
                 if get_render_type().get('NORMAL'):
                     e.render(tela=tela)
+
+    def reset(self):
+        self._dificult_type = None
+        self._top_obstacle_matrix_list.clear()
+        self._bottom_obstacle_matrix_list.clear()
+        self.set_dificult_type('easy')
+        self.generate(self.get_bg_layers(), firsts=True)
+
