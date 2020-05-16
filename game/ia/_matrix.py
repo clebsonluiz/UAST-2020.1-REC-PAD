@@ -17,9 +17,13 @@ class Matrix:
         return self._matrix
 
     def get_rows(self):
+        if self._rows is not len(self.get()):
+            self._rows = len(self.get())
         return self._rows
 
     def get_cols(self):
+        if self._cols is not len(self.get()[0]):
+            self._cols = len(self.get()[0])
         return self._cols
 
     def sum(self, matrix: 'Matrix' = None) -> 'Matrix':
@@ -28,14 +32,14 @@ class Matrix:
             for e in self._matrix:
                 var += sum(e)
             return Matrix([[var]])
-        assert self._rows is matrix._rows and self._cols is matrix._cols
+        assert self.get_rows() is matrix.get_rows() and self.get_cols() is matrix.get_cols()
         _M = [
             [self._matrix[i][j] + matrix.get()[i][j] for j in range(self._cols)] for i in range(self._rows)
         ]
         return Matrix(_M)
 
     def sub(self, matrix: 'Matrix') -> 'Matrix':
-        assert self._rows is matrix._rows and self._cols is matrix._cols
+        assert self.get_rows() is matrix.get_rows() and self.get_cols() is matrix.get_cols()
         _M = [
             [self._matrix[i][j] - matrix.get()[i][j] for j in range(self._cols)] for i in range(self._rows)
         ]
@@ -43,7 +47,8 @@ class Matrix:
 
     def mult(self, matrix: 'Matrix' = None, value=None) -> 'Matrix':
         if matrix:
-            assert self._cols is matrix._rows
+            assert self.get_cols() is matrix.get_rows()
+
             rows: int = self._rows
             cols: int = matrix._cols
 
@@ -56,8 +61,8 @@ class Matrix:
             return _M
         else:
             assert value
-            rows: int = self._rows
-            cols: int = self._cols
+            rows: int = self.get_rows()
+            cols: int = self.get_cols()
 
             _M = Matrix.empty(rows, cols)
 

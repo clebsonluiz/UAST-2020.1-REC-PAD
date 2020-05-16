@@ -12,13 +12,17 @@ class File:
         if self._file.readable():
             self._file.seek(0)
         else:
-            self._file.close()
+            if not self._file.closed:
+                self._file.close()
             self._file = open(file=self._name, mode='r')
         return self._file.read().rstrip()
 
     def write(self, msg: str):
+        if self._file.closed:
+            self._file = open(file=self._name, mode='w')
         if not self._file.writable():
-            self._file.close()
+            if not self._file.closed:
+                self._file.close()
             self._file = open(file=self._name, mode='w')
         return self._file.write(msg)
 

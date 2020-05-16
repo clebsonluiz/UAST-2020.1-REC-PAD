@@ -1,14 +1,12 @@
 import pygame as pg
 import game.view.frame as frame
-import game.controll.events as e
+import game.controll.events_ia as e
 from game.constants import *
-
-from game.model.layer import BackgroundMap
-from game.model.player import Player
-from game.level import DefaultLevel
+from game.level.default_level_ia import DefaultLevelIA
+import sys as system
 
 
-class Game:
+class GameIA:
 
     def __init__(self, width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title='Game Window'):
         self.Frame = frame.Frame(width, height, title)
@@ -20,7 +18,7 @@ class Game:
         self.font_credits = pg.font.SysFont("monospace", 12, italic=True)
         self.font_fps = pg.font.SysFont("monospace", 20, italic=True)
 
-        self.level = DefaultLevel()
+        self.ia_level = DefaultLevelIA()
 
     def start(self):
         self.running = True
@@ -43,16 +41,16 @@ class Game:
         pass
 
     def _render(self, tela: pg.Surface = None):
-        if tela is None or not self.level.loaded() or not self.level.is_ready():
+        if tela is None or not self.ia_level.loaded() or not self.ia_level.is_ready():
             return
         tela.fill(BACKGROUND_COLOR)
 
-        self.level.render(tela=tela)
+        self.ia_level.render(tela=tela)
 
         tela.blit(self.font_fps.render('FPS: {:.2f}'.format(self.clock.get_fps()), 1, WHITE), (SCREEN_WIDTH - 150, 10))
-        tela.blit(self.font_score.render(' x ' + str(self.level.player.get_score()), 1, WHITE), (20, 10))
+        tela.blit(self.font_score.render(' x ' + str(self.ia_level.get_O_ATUAL_JOGADOR().get_score()), 1, WHITE), (20, 10))
         self._credits(tela=tela)
-        tela.blit(self.font_fps.render('Speed: {:.3f}'.format(self.level.speed), 1, WHITE),
+        tela.blit(self.font_fps.render('Speed: {:.3f}'.format(self.ia_level.speed), 1, WHITE),
                   (SCREEN_WIDTH - 150, 30))
 
         # pg.draw.rect(tela, WHITE, pg.Rect(240, 270, 398, 208), 1)
@@ -73,11 +71,11 @@ class Game:
         pass
 
     def _update(self):
-        self.level.update()
+        self.ia_level.update()
         pass
 
     def _credits(self, tela: pg.Surface = None):
-        text = self.level.bg_map.get_credits()
+        text = self.ia_level.IA.BG_MAP.get_credits()
         font: pg.font.Font = self.font_credits
         for line in range(len(text)):
             tela.blit(font.render(text[line], 1, WHITE),

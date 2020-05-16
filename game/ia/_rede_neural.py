@@ -88,6 +88,7 @@ class RedeNeural:
 
         # Camada oculta, OCULTA = ENTRADAS * PESOS_ENTRADAS da rede neural junto com o viés BIAS
         oculta: Matrix = pesos_entradas.mult(entradas)
+
         oculta.get().insert(0, [self.BIAS])
         # Função de Ativação usada para atualizar os valores
         oculta.map(_FuncaoAtivacao.sigmoid)

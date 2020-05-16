@@ -8,11 +8,14 @@ import pygame as pg
 from game.controll.game import Game
 from game.constants import set_render_type
 
+from game.controll.game_ia import GameIA
+
 pg.init()
 
 try:
-    set_render_type({'NORMAL': True, 'COLISION': False})
-    game = Game()
+    set_render_type({'NORMAL': False, 'COLISION': True})
+    # game = Game()
+    game = GameIA()
     game.start()
 except Exception as ex:
     print(ex)
