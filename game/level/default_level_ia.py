@@ -14,7 +14,7 @@ class DefaultLevelIA:
         self.speed: float = 3.0
         self._run: bool = False
         self._loaded: bool = False
-        self._desintegrator: Desintegrator = Desintegrator(background=self.IA.BG_MAP)
+        self._desintegrator = None
         if not self._run:
             self.start()
 
@@ -103,7 +103,8 @@ class DefaultLevelIA:
 
         """
         self.IA.start()
-
+        self._desintegrator = Desintegrator(background=self.IA.BG_MAP)
+        self._desintegrator.increment_maximum_x_in(30)
         self.speed = 3.0
         self._run = True
 

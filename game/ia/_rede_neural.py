@@ -20,9 +20,11 @@ class _FuncaoAtivacao:
     def sigmoid(t):
         """
         :param t:
-        :return: 1 / (1 + e^-t)
+        :return: 1 / (1 + e^-t) if t >= 0 else return 1 - 1 / (1 + exp(t)) to not raise a OverflowError
         """
         from math import exp
+        if t < 0:
+            return 1 - 1 / (1 + exp(t))
         return 1 / (1 + exp(-t))
 
     @staticmethod
