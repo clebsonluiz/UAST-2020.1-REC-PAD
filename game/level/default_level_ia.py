@@ -1,21 +1,12 @@
 import pygame as pg
 # from game.model.player import Player
-from game.model.layer.map import BackgroundMap
+from game.model.desintegrator import Desintegrator
 from game.ia import SelecaoNatural
 
 
 class DefaultLevelIA:
     """
     Default Level IA Class who represents the level will be used to traning a IA
-
-    Parameters
-    __________
-    player: Player
-        Player of the will be integrate to this level
-    background: BackgroundMap
-        Colision layer of the player object to this level
-    builded: bool
-        Bool value that represents if the class as a parameters and is ready to run
     """
 
     def __init__(self):
@@ -23,8 +14,16 @@ class DefaultLevelIA:
         self.speed: float = 3.0
         self._run: bool = False
         self._loaded: bool = False
+        self._desintegrator: Desintegrator = Desintegrator(background=self.IA.BG_MAP)
         if not self._run:
             self.start()
+
+    def increment_x_of_desintegrator_in(self, more: int = 15):
+        """
+        :param more: value will be incremented in x axis of desintegrator
+        """
+        if self._desintegrator:
+            self._desintegrator.increment_maximum_x_in(more=more)
 
     def increment_speed(self):
         """
@@ -38,10 +37,22 @@ class DefaultLevelIA:
         """
         return self.IA.BG_MAP.get_obstacles()
 
+    def get_desintegrator(self):
+        """
+        :return: the desintegrator
+        """
+        return self._desintegrator
+
     def get_O_MELHOR_JOGADOR(self):
+        """
+        :return: returns the Current best Player of IA Generation
+        """
         return self.IA.O_MELHOR
 
     def get_O_ATUAL_JOGADOR(self):
+        """
+        :return: returns the Current Player of IA Generation
+        """
         return self.IA.O_ATUAL
 
     def loaded(self):
@@ -64,6 +75,7 @@ class DefaultLevelIA:
             return
         self.IA.BG_MAP.update(speed=self.speed)
         self.IA.O_ATUAL.update()
+        self._desintegrator.update()
 
     def render(self, tela: pg.Surface):
         """
@@ -75,6 +87,7 @@ class DefaultLevelIA:
             return
         self.IA.BG_MAP.render(tela=tela)
         self.IA.O_ATUAL.render(tela=tela)
+        self._desintegrator.render(tela=tela)
 
         # pg.draw.line(tela, (255, 255, 255),
         #              self.player.get_sensor().get_center_pos_player(),
@@ -101,6 +114,8 @@ class DefaultLevelIA:
         """
         self.stop()
         self.IA.restart()
+        self._desintegrator = Desintegrator(background=self.IA.BG_MAP)
+        self._desintegrator.increment_maximum_x_in(30)
         self.speed = 3.0
         self._run = True
 

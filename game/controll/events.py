@@ -27,11 +27,15 @@ def events(game):
 
 def check_coin_colision(game):
     obs = game.level.bg_map.get_obstacles()[0]
+    desintegrator = game.level.get_desintegrator()
+    if desintegrator.to_rect().colliderect(game.level.player.to_rect()):
+        game.level.stop()
     if obs.to_rect().colliderect(game.level.player.to_rect()):
         # game.stop()
         game.level.stop()
     if obs.is_out_screen() and obs.coin_still_in_obstacle():
         game.level.player.decrement_score()
+        game.level.increment_x_of_desintegrator_in()
     if game.level.player.to_rect().colliderect(obs.get_coin().to_rect()) and obs.coin_still_in_obstacle():
         obs.make_coin_colision()
         game.level.player.increment_score()

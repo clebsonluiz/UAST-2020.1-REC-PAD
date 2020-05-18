@@ -14,8 +14,8 @@ pg.init()
 
 try:
     set_render_type({'NORMAL': False, 'COLISION': True})
-    # game = Game()
-    game = GameIA()
+    game = Game()
+    # game = GameIA()
     game.start()
 except Exception as ex:
     print(ex)

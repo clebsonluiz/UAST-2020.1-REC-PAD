@@ -47,7 +47,7 @@ class ObstacleConstruct:
         )
         self._lowest_dist: int = 300
         self._biggest_dist: int = 500
-        self._top_or_bottom = [False, False]
+        self._top_or_bottom = [False, True]
         self._dificult_type = 'easy'
 
     def _dificult_type_2(self):

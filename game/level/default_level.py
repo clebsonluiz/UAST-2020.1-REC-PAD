@@ -1,6 +1,7 @@
 import pygame as pg
 from game.model.player import Player
 from game.model.layer.map import BackgroundMap
+from game.model.desintegrator import Desintegrator
 
 
 class DefaultLevel:
@@ -19,12 +20,14 @@ class DefaultLevel:
     def __init__(self,
                  player: Player = None,
                  background_map: BackgroundMap = None,
+                 desintegrator: Desintegrator = None,
                  builded: bool = False):
         self.player: Player = player
         self.bg_map: BackgroundMap = background_map
         self.speed: float = 3.0
         self._run: bool = builded
         self._loaded: bool = False
+        self._desintegrator = desintegrator
         if not self._run and (self.player is None or self.bg_map is None):
             self._load()
 
@@ -34,11 +37,21 @@ class DefaultLevel:
         """
         self.speed += 0.0002
 
+    def increment_x_of_desintegrator_in(self, more: int = 15):
+        """
+        :param more: value will be incremented in x axis of desintegrator
+        """
+        if self._desintegrator:
+            self._desintegrator.increment_maximum_x_in(more=more)
+
     def get_obstacles(self):
         """
         :return: returns a list of obstacles of bg_map
         """
         return self.bg_map.get_obstacles()
+
+    def get_desintegrator(self):
+        return self._desintegrator
 
     def loaded(self):
         """
@@ -62,6 +75,7 @@ class DefaultLevel:
             return
         self.bg_map.update(speed=self.speed)
         self.player.update()
+        self._desintegrator.update()
 
     def render(self, tela: pg.Surface):
         """
@@ -73,6 +87,7 @@ class DefaultLevel:
             return
         self.bg_map.render(tela=tela)
         self.player.render(tela=tela)
+        self._desintegrator.render(tela=tela)
 
         # pg.draw.line(tela, (255, 255, 255),
         #              self.player.get_sensor().get_center_pos_player(),
@@ -96,7 +111,8 @@ class DefaultLevel:
         else:
             self.bg_map.ObstacleBuilder.reset()
         self.player = player if player else Player(background=self.bg_map)
-
+        self._desintegrator = Desintegrator(background=self.bg_map)
+        self._desintegrator.increment_maximum_x_in(30)
         self.speed = 3.0
         self._run = True
 
