@@ -83,8 +83,14 @@ class Player:
         self.shadow.change_gravit()
         player_position: tuple = self.player.get_position()
         shadow_position: tuple = self.shadow.get_position()
+        player_vector: tuple = self.player.get_vector()
+        shadow_vector: tuple = self.shadow.get_vector()
         self.player.set_position(shadow_position)
         self.shadow.set_position(player_position)
+        self.player.set_dx(shadow_vector[0])
+        self.player.set_dy(shadow_vector[1])
+        self.shadow.set_dx(player_vector[0])
+        self.shadow.set_dy(player_vector[1])
 
     def do_jump(self):
         """

@@ -31,7 +31,7 @@ def check_coin_colision(game):
     desintegrator = game.ia_level.get_desintegrator()
 
     if desintegrator.to_rect().colliderect(game.ia_level.get_O_ATUAL_JOGADOR().to_rect()):
-        game.level.stop()
+        game.ia_level.stop()
         game.ia_level.restart()
     if obs.to_rect().colliderect(game.ia_level.get_O_ATUAL_JOGADOR().to_rect()):
         # game.stop()

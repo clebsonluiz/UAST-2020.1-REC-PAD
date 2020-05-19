@@ -9,6 +9,8 @@ from game.controll.game import Game
 from game.constants import set_render_type
 
 from game.controll.game_ia import GameIA
+from game.model.file import close_all
+
 
 pg.init()
 
@@ -22,3 +24,4 @@ except Exception as ex:
 
 finally:
     pg.quit()
+    close_all()

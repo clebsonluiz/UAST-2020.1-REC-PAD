@@ -103,12 +103,10 @@ class Individuo(Player):
 
     def save_in_file(self):
         _FILE.write(JSON.dumps(self.to_json()))
-        _FILE.close_all()
 
     @staticmethod
     def load_from_file(background: BackgroundMap):
         file_json = _FILE.read()
-        _FILE.close_all()
 
         if file_json is None or len(file_json) <= 0:
             file_json = "{}"

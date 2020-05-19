@@ -20,5 +20,5 @@ def write(msg: str):
 
 
 def _backup():
-    msg: str = read()
+    msg: str = _FILE.read()
     _BACKUP.write(msg=msg)
