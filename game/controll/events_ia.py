@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 
+
 def events(game):
     if game is None:
         sys.exit()
@@ -17,12 +18,7 @@ def events(game):
                 game.ia_level.get_O_MELHOR_JOGADOR().save_in_file()
             elif event.key == pg.K_DOWN:
                 game.show_credits()
-            # elif event.key == pg.K_RIGHT:
-            #     game.level.player.do_jump()
-            # elif event.key == pg.K_UP:
-            #     game.level.player.do_change_gravit()
-            # elif event.key == pg.K_SPACE:
-            #     game.level.reload()
+
     if game.ia_level.loaded() and game.ia_level.is_ready():
         check_coin_colision(game=game)
         check_dificult(game=game)
@@ -36,7 +32,6 @@ def check_coin_colision(game):
         game.ia_level.stop()
         game.ia_level.restart()
     if obs.to_rect().colliderect(game.ia_level.get_O_ATUAL_JOGADOR().to_rect()):
-        # game.stop()
         game.ia_level.stop()
         game.ia_level.restart()
     if obs.is_out_screen() and obs.coin_still_in_obstacle():

@@ -12,7 +12,7 @@ from game.controll.game_ia import GameIA
 from game.model.file import close_all
 
 
-GAME_AI_MODE = True
+GAME_AI_MODE = False
 
 pg.init()
 

@@ -1,10 +1,10 @@
-from ..entity import EntityMap
+from ..entity import SpriteSheetEntity
 from ...constants import YELLOW, get_render_type
 
 import pygame as pg
 
 
-class Coin(EntityMap):
+class Coin(SpriteSheetEntity):
 
     def __init__(self, is_on_top: bool = False):
         super().__init__('from_OpenGameArt_CoinsByPuddin.png',)
@@ -59,7 +59,7 @@ class Coin(EntityMap):
             i_x=0, i_y=0,
             jmp_p_x=0, jmp_p_y=0,
         )
-        s_list_coins = EntityMap.sprite_list(
+        s_list_coins = SpriteSheetEntity.sprite_list(
             from_list=coins,
             from_row=0, from_i=0, to_i=8,
         )

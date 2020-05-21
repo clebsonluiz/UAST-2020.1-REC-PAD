@@ -33,7 +33,6 @@ def check_coin_colision(game):
     if desintegrator.to_rect().colliderect(game.level.player.to_rect()):
         game.level.stop()
     if obs.to_rect().colliderect(game.level.player.to_rect()):
-        # game.stop()
         game.level.stop()
     if obs.is_out_screen() and obs.coin_still_in_obstacle():
         game.level.player.decrement_score()
