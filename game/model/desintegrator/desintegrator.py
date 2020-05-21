@@ -30,7 +30,7 @@ class Desintegrator:
         self.top_desintegrator.curr_height = self.bottom_desintegrator.curr_height
         self.top_desintegrator.curr_width = self.bottom_desintegrator.curr_width
         self.bottom_desintegrator.set_colision_padding(
-            pg.Rect(-75, 0, 45, 0)
+            pg.Rect(-75, 0, 45, -30)
         )
         self.top_desintegrator.set_colision_padding(
             pg.Rect(-75, 0, 45, 0)
@@ -69,17 +69,17 @@ class Desintegrator:
             self.top_desintegrator.render(tela=tela, color=RED)
             self.bottom_desintegrator.render(tela=tela, color=YELLOW)
 
-    def to_rect(self) -> pg.Rect:
+    def to_rect(self, scale: float = 1) -> pg.Rect:
         """
         :return: the desintegrator pg.Rect colision
         """
         rect1 = self.top_desintegrator.to_rect()
         rect2 = self.bottom_desintegrator.to_rect()
         return pg.rect.Rect(
-            rect1.x,
-            rect1.y,
-            rect2.width,
-            rect2.bottom
+            rect1.x * scale,
+            rect1.y * scale,
+            rect2.width * scale,
+            rect2.bottom * scale
         )
 
     def make_animations_list(self):

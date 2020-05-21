@@ -38,6 +38,25 @@ class RedeNeural:
         from ._individuo import Individuo
         self._individuo: Individuo = individuo
         self.BIAS = 1.0
+        self.INPUT_RENDERS = [
+            [False, False, False, False],
+            [False, False],
+            [False, False],
+        ]
+
+    def get_input_renders(self):
+        return self.INPUT_RENDERS
+
+    def reset_input_renders(self):
+        R = self.INPUT_RENDERS
+        R[0][0] = False
+        R[0][1] = False
+        R[0][2] = False
+        R[0][3] = False
+        R[1][0] = False
+        R[1][1] = False
+        R[2][0] = False
+        R[2][1] = False
 
     def get_entradas_matrix(self) -> Matrix:
         return Matrix([
@@ -80,9 +99,16 @@ class RedeNeural:
     def update(self):
         """
         """
+        self.reset_input_renders()
         # Camada de Entradas da rede neural junto com o viés BIAS
         entradas: Matrix = self.get_entradas_matrix()
         entradas.get().insert(0, [self.BIAS])
+
+        R = self.INPUT_RENDERS
+        R[0][0] = True
+        R[0][1] = True
+        R[0][2] = True
+        R[0][3] = True
 
         # Pesos da camada de entrada e da camada oculta
         pesos_entradas: Matrix = self.get_pesos_entradas_matrix()
@@ -95,6 +121,9 @@ class RedeNeural:
         # Função de Ativação usada para atualizar os valores
         oculta.map(_FuncaoAtivacao.sigmoid)
 
+        R[1][0] = True
+        R[1][1] = True
+
         # Camada de saida, SAIDA = OCULTA * PESOS_OCULTA
         saida: Matrix = pesos_oculta.mult(oculta)
         # Aplicação da Função de Ativação
@@ -103,10 +132,17 @@ class RedeNeural:
         # Execução da função de ativação, se usada a sigmoid logo valor da entrada deve ser maior que 0.5
         fa = _FuncaoAtivacao.conditional(saida.get(), 0.5)
 
+        R[1][0] = fa(r=0)
+        R[1][1] = fa(r=1)
+
         if fa(r=0):
             self._individuo.do_jump()
+            R[1][0] = True
+            R[2][0] = True
         if fa(r=1):
             self._individuo.do_change_gravit()
+            R[1][1] = True
+            R[2][1] = True
 
     @staticmethod
     def anulator_negatives(matrix: Matrix):

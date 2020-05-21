@@ -79,7 +79,7 @@ class TileLayer:
         """
         self._vec_x = x
 
-    def to_rect(self, x: float = None, y: float = None) -> pg.Rect:
+    def to_rect(self, x: float = None, y: float = None, scale: float = 1.0) -> pg.Rect:
         """
         Generates a colison pygame rect of a layer
 
@@ -90,7 +90,7 @@ class TileLayer:
         width = self._layer.get_image().get_width()
         height = self._layer.get_image().get_height()
 
-        return pg.rect.Rect(x, y, width, height)
+        return pg.rect.Rect(x * scale, y * scale, width * scale, height * scale)
 
     def render(self, tela: pg.Surface,
                color: tuple = (255, 255, 255, 255),

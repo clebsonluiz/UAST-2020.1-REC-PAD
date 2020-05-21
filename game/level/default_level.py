@@ -28,8 +28,13 @@ class DefaultLevel:
         self._run: bool = builded
         self._loaded: bool = False
         self._desintegrator = desintegrator
+        self.best_score: int = 0
         if not self._run and (self.player is None or self.bg_map is None):
             self._load()
+
+    def update_best_score(self):
+        if self.best_score < self.player.get_score():
+            self.best_score = self.player.get_score()
 
     def increment_speed(self):
         """

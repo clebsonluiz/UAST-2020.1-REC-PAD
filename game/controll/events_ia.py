@@ -13,8 +13,10 @@ def events(game):
             if event.key == pg.K_ESCAPE:
                 game.stop()
                 sys.exit()
-            elif event.key == pg.K_DOWN:
+            elif event.key == pg.K_SPACE:
                 game.ia_level.get_O_MELHOR_JOGADOR().save_in_file()
+            elif event.key == pg.K_DOWN:
+                game.show_credits()
             # elif event.key == pg.K_RIGHT:
             #     game.level.player.do_jump()
             # elif event.key == pg.K_UP:

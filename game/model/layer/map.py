@@ -27,12 +27,14 @@ class BackgroundMap:
             "Platform tilesheet (Cave) ",
             "-By Lanea Zimmerman",
             "Platform tilesheet (Coin)",
-            "-By Puddin"
+            "-By Puddin",
+            "Desintegrator (Fire Sprite)",
+            "-By Davias"
         ]
 
         from ..score.coin import Coin
         self._coin_score: Coin = Coin()
-        self._coin_score.set_position((10, 12))
+        self._coin_score.set_position((10, 8))
 
     def get_background_rect(self) -> pg.Rect:
         """
@@ -76,9 +78,9 @@ class BackgroundMap:
 
         :param tela: pygame Surface when the layers and obstacles are drawed in
         """
-        self._coin_score.render(tela=tela)
         self.BgLayers.render(tela=tela)
         self.ObstacleBuilder.render(tela=tela)
+        self._coin_score.render(tela=tela)
 
     def get_credits(self) -> List[str]:
         """

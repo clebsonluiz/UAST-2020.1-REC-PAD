@@ -20,6 +20,8 @@ def events(game):
                 game.level.player.do_change_gravit()
             elif event.key == pg.K_SPACE:
                 game.level.reload()
+            elif event.key == pg.K_DOWN:
+                game.show_credits()
 
     check_coin_colision(game=game)
     check_dificult(game=game)
@@ -39,6 +41,7 @@ def check_coin_colision(game):
     if game.level.player.to_rect().colliderect(obs.get_coin().to_rect()) and obs.coin_still_in_obstacle():
         obs.make_coin_colision()
         game.level.player.increment_score()
+        game.level.update_best_score()
 
 
 def check_dificult(game):

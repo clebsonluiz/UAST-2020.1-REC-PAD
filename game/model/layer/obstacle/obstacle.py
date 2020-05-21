@@ -82,7 +82,7 @@ class Obstacle(TileLayer):
         """
         return int(self.get_position()[0] + self._curr_width * 2) + default
 
-    def to_rect(self, x: float = None, y: float = None) -> pg.Rect:
+    def to_rect(self, x: float = None, y: float = None, scale: float = 1) -> pg.Rect:
         """
         Generates a colison pygame rect of the obstacle with the padding applied
 
@@ -91,10 +91,10 @@ class Obstacle(TileLayer):
         if self._padding is None:
             self._padding = pg.rect.Rect(0, 0, 0, 0)
         return pg.rect.Rect(
-            self.pos_x - self._padding.left,
-            self.pos_y - self._padding.top,
-            self.get_layer().get_image().get_width() - self._padding.right,
-            self.get_layer().get_image().get_height() - self._padding.bottom)
+            (self.pos_x - self._padding.left) * scale,
+            (self.pos_y - self._padding.top) * scale,
+            (self.get_layer().get_image().get_width() - self._padding.right) * scale,
+            (self.get_layer().get_image().get_height() - self._padding.bottom) * scale)
 
     def is_out_screen(self) -> bool:
         """

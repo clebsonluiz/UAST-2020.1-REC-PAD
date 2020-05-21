@@ -65,6 +65,7 @@ class Geracao:
         if self.O_ATUAL.cromossomo is None:
             self.O_ATUAL.create_cromossomo(randomize=True)
         self.seleciona_populacao(firsts=True)
+        self.POPULACAO.pop(0)
 
     def seleciona_populacao(self, firsts: bool = False):
         """
@@ -75,10 +76,10 @@ class Geracao:
         self.O_MELHOR.numero = 0
         self.O_MELHOR.geracao = self.O_MELHOR.geracao + 1
         self.POPULACAO.append(self.O_MELHOR)
-        for i in range(self.MAX_POPULACAO - 1):
+        for i in range((self.MAX_POPULACAO - 1)):
             individuo: Individuo = self.O_MELHOR.clone()
             individuo.numero = i + 1
-            individuo.geracao = individuo.geracao + 1
+            # individuo.geracao = individuo.geracao + 1
             if firsts:
                 individuo.cromossomo = individuo.create_cromossomo(randomize=True)
             else:

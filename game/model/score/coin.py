@@ -12,6 +12,9 @@ class Coin(EntityMap):
         self._is_on_top: bool = is_on_top
         self.make_animations_list()
 
+    def is_on_top(self) -> bool:
+        return self._is_on_top
+
     def loaded(self) -> bool:
         return self._loaded
 

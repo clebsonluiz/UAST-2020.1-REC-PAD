@@ -12,8 +12,8 @@ class BackgroundLayers:
     """
 
     def __init__(self):
-        self._rect_top = pg.rect.Rect(0, (SCREEN_HEIGHT * 0.2) - 10, SCREEN_WIDTH, 10)
-        self._rect_bottom = pg.rect.Rect(0, SCREEN_HEIGHT * 0.5, SCREEN_WIDTH, 10)
+        self._rect_top = pg.rect.Rect(0, (SCREEN_HEIGHT * 0.1), SCREEN_WIDTH, 10)
+        self._rect_bottom = pg.rect.Rect(0, (SCREEN_HEIGHT * 0.4) + 10, SCREEN_WIDTH, 10)
 
         self._bg: TileLayer = TileLayer(MATRIX_BACKGROUND_LAYER, vec_x=-0.5)
         self._bg.set_position((0, self._rect_top.bottom))

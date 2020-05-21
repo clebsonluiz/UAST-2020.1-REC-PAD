@@ -104,7 +104,7 @@ class EntityAnimation(ABC):
         """
         self._padding = padding
 
-    def to_rect(self, x: float = None, y: float = None) -> pg.Rect:
+    def to_rect(self, x: float = None, y: float = None, scale: float = 1) -> pg.Rect:
         """
         Generates a colison pygame rect of a entity with the padding
 
@@ -124,10 +124,10 @@ class EntityAnimation(ABC):
         if self._padding is None:
             self._padding = pg.Rect(0, 0, 0, 0)
 
-        return pg.rect.Rect(x - self._padding.left,
-                            y - self._padding.top,
-                            width - self._padding.right,
-                            height - self._padding.bottom)
+        return pg.rect.Rect((x - self._padding.left) * scale,
+                            (y - self._padding.top) * scale,
+                            (width - self._padding.right) * scale,
+                            (height - self._padding.bottom) * scale)
 
     def set_curr_row(self, curr_row: int = 0):
         """
