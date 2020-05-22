@@ -12,12 +12,12 @@ from game.controll.game_ia import GameIA
 from game.model.file import close_all
 
 
-GAME_AI_MODE = False
+GAME_AI_MODE = True
 
 pg.init()
 
 try:
-    set_render_type({'NORMAL': False, 'COLISION': True, 'DEBUG': True})
+    set_render_type({'NORMAL': True, 'COLISION': False, 'DEBUG': True})
     if GAME_AI_MODE:
         game = GameIA()
     else:

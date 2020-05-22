@@ -67,6 +67,10 @@ class Player:
         """Decrements the score of player"""
         self._player_score -= 1
 
+    def reset_score(self):
+        """Resets score"""
+        self._player_score = 0
+
     def loaded(self) -> bool:
         """
         :return: bool value, true if this object as ready to be rendenized in screen

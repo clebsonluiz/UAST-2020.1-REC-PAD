@@ -46,7 +46,7 @@ def check_coin_colision(game):
 def check_dificult(game):
 
     if game.level.player.get_score() < 20:
-        if game.level.speed < 3.3:
+        if game.level.speed < 3.9:
             game.level.increment_speed()
     if 20 <= game.level.player.get_score() < 50:
         game.level.bg_map.ObstacleBuilder.set_dificult_type('normal')
@@ -54,7 +54,10 @@ def check_dificult(game):
             game.level.speed = 4.0
         if game.level.speed < 5.0:
             game.level.increment_speed()
-    elif game.level.player.get_score() >= 50:
+    elif 50 <= game.level.player.get_score() < 100:
         game.level.bg_map.ObstacleBuilder.set_dificult_type('hard')
-        if game.level.speed < 6.0:
+        if game.level.speed < 8.0:
             game.level.increment_speed()
+    elif game.level.player.get_score() > 100:
+        game.level.bg_map.ObstacleBuilder.set_dificult_type('hard')
+        game.level.increment_speed()

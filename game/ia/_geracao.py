@@ -75,6 +75,7 @@ class Geracao:
         """
         self.O_MELHOR.numero = 0
         self.O_MELHOR.geracao = self.O_MELHOR.geracao + 1
+        self.O_MELHOR.reset_score()
         self.POPULACAO.append(self.O_MELHOR)
         for i in range((self.MAX_POPULACAO - 1)):
             individuo: Individuo = self.O_MELHOR.clone()

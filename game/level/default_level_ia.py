@@ -29,7 +29,7 @@ class DefaultLevelIA:
         """
         Increments speed of map
         """
-        self.speed += 0.0002
+        self.speed += 0.0004
 
     def get_obstacles(self):
         """

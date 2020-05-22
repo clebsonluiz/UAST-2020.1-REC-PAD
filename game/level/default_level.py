@@ -40,7 +40,7 @@ class DefaultLevel:
         """
         Increments speed of map
         """
-        self.speed += 0.0002
+        self.speed += 0.0004
 
     def increment_x_of_desintegrator_in(self, more: int = 15):
         """
