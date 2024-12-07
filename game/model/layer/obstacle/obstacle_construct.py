@@ -77,11 +77,11 @@ class ObstacleConstruct:
     def set_dificult_type(self, dificult: str):
         if dificult is self._dificult_type:
             return
-        if dificult is 'easy':
+        if dificult == 'easy':
             self._dificult_type_1()
-        elif dificult is 'normal':
+        elif dificult == 'normal':
             self._dificult_type_2()
-        elif dificult is 'hard':
+        elif dificult == 'hard':
             self._dificult_type_3()
 
     def _generate_distance(self, firsts: bool = False) -> int:
@@ -94,7 +94,7 @@ class ObstacleConstruct:
             dist = self._lowest_dist
         else:
             dist = next_int(self._lowest_dist, self._biggest_dist)  # Gerar uma distãncia entre obstaculos
-        if len(self._OBSTACLES) is not 0:
+        if len(self._OBSTACLES) != 0:
             return self._OBSTACLES[-1].get_last_distance(default=dist)
         return SCREEN_WIDTH
 
@@ -106,7 +106,7 @@ class ObstacleConstruct:
         :return: the matrix List[List[float]]
         """
         limit = len(self._top_obstacle_matrix_list) + len(self._bottom_obstacle_matrix_list)
-        index: int = next_int(0, (limit / 2) - 1)
+        index: int = next_int(0, int((limit / 2) - 1))
         if position_up:
             return self._top_obstacle_matrix_list[index]
         return self._bottom_obstacle_matrix_list[index]
@@ -126,7 +126,7 @@ class ObstacleConstruct:
         obs.pos_x = self._generate_distance(firsts=firsts)
         obs.pos_y = obs.my_relative_positon_on_map(position_up)
         obs.set_colision_padding(
-            pg.Rect(0, -20 if position_up else -25, 0, 64)
+            pg.Rect(0.0, -20.0 if position_up else -25.0, 0.0, 64.0)
         )
         obs.build_coin(position_up=position_up)
         return obs
@@ -181,7 +181,7 @@ class ObstacleConstruct:
         :param speed: movement speed of the obstacles
         """
         obstacles = self.get_obstacles()
-        if len(self.get_obstacles()) is 0:
+        if len(self.get_obstacles()) == 0:
             return
         if len(obstacles) <= 4:
             self.generate(self.get_bg_layers())

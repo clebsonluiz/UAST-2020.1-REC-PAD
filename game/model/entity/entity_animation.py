@@ -113,9 +113,9 @@ class EntityAnimation(ABC):
         x = self.pos_x if (x is None) else x
         y = self.pos_y if (y is None) else y
 
-        if self.curr_height is 0:
+        if self.curr_height == 0:
             self.curr_height = self.current_sprite().get_height()
-        if self.curr_width is 0:
+        if self.curr_width == 0:
             self.curr_width = self.current_sprite().get_width()
 
         width = self.curr_width

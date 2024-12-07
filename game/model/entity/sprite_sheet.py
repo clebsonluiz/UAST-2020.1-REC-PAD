@@ -78,9 +78,9 @@ class SpriteSheetEntity(EntityAnimation, ABC):
         """
         assert (from_list is not None and len(from_list) > 0)
 
-        if to_row is 0:
+        if to_row == 0:
             to_row = len(from_list) - 1
-        if to_col is 0:
+        if to_col == 0:
             to_col = len(from_list[to_row])
 
         s_list = []

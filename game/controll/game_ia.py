@@ -18,7 +18,6 @@ class GameIA:
         self.font_credits = pg.font.SysFont("monospace", 12, bold=True, italic=True)
         self.font_fps = pg.font.SysFont("monospace", 18, bold=True, italic=True)
         self.font_debug = pg.font.SysFont("monospace", 12, bold=True, italic=True)
-
         self.ia_level = DefaultLevelIA()
         self._show_credits: bool = False
 
@@ -90,14 +89,14 @@ class GameIA:
             pg.draw.rect(tela, RED, self.ia_level.get_desintegrator().to_rect(scale=scale))
 
             top = self.ia_level.IA.BG_MAP.get_limit_top().copy()
-            top.y = (top.y - 22) * scale
-            top.h = 32 * scale
-            top.w = top.w * scale
+            top.y = int((top.y - 22) * scale)
+            top.h = int(32 * scale)
+            top.w = int(top.w * scale)
 
             bottom = self.ia_level.IA.BG_MAP.get_limit_bottom().copy()
-            bottom.y = bottom.y * scale
-            bottom.h = 32 * scale
-            bottom.w = bottom.w * scale
+            bottom.y = int(bottom.y * scale)
+            bottom.h = int(32 * scale)
+            bottom.w = int(bottom.w * scale)
 
             pg.draw.rect(tela, WHITE, top)
             pg.draw.rect(tela, WHITE, bottom)
